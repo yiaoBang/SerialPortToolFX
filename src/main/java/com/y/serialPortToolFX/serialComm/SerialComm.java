@@ -4,6 +4,7 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.y.serialPortToolFX.serialComm.listener.MessageListenerWithDelimiter;
 import com.y.serialPortToolFX.serialComm.listener.MessageListenerWithPacketSize;
+import com.y.serialPortToolFX.utils.CodeFormat;
 import com.y.serialPortToolFX.utils.FX;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -15,8 +16,8 @@ import lombok.Setter;
 import lombok.Synchronized;
 
 @Getter
-public class SerialComm implements AutoCloseable {
-    protected DataWriteFile dataWriteFile;
+public final class SerialComm implements AutoCloseable {
+    private DataWriteFile dataWriteFile;
     /**
      * 发送保存(写入本地文件)
      */
@@ -49,6 +50,7 @@ public class SerialComm implements AutoCloseable {
     private volatile byte[] messageDelimiter = new byte[0];
     private volatile int packSize = 0;
 
+
     public SerialComm() {
         this.listener = new MessageListenerWithDelimiter(this);
     }
@@ -58,7 +60,7 @@ public class SerialComm implements AutoCloseable {
         this.listener = new MessageListenerWithDelimiter(this);
     }
 
-    public final void updateListener(byte[] messageDelimiter) {
+    public  void updateListener(byte[] messageDelimiter) {
         if (messageDelimiter != null) {
             this.messageDelimiter = messageDelimiter;
             this.listener = new MessageListenerWithDelimiter(this);
@@ -66,7 +68,8 @@ public class SerialComm implements AutoCloseable {
             serialPort.addDataListener(this.listener);
         }
     }
-    public final void updateListener(int packSize) {
+
+    public  void updateListener(int packSize) {
         if (messageDelimiter != null) {
             this.packSize = packSize;
             this.listener = new MessageListenerWithPacketSize(this);
@@ -75,7 +78,7 @@ public class SerialComm implements AutoCloseable {
         }
     }
 
-    public final void findSerialPort() {
+    public  void findSerialPort() {
         close();
         for (SerialPort serial : SerialPortMonitor.commPorts) {
             if (serial.getSystemPortName().equals(serialPortName)) {
@@ -86,20 +89,25 @@ public class SerialComm implements AutoCloseable {
         serialPort = null;
     }
 
-    public final boolean openSerialPort() {
+    public  void openSerialPort() {
         findSerialPort();
-        if (serialPort != null) {
-            serialPort.setComPortParameters(baudRate, dataBits, stopBits, parity);
-            serialPort.setFlowControl(flowControl);
-            serialPort.addDataListener(this.listener);
-            boolean b = serialPort.openPort();
-            dataWriteFile = b ? new DataWriteFile(serialPortName) : null;
-            return b;
+        if (serialPort == null) {
+            FX.run(() -> serialPortState.set(false));
+            return;
         }
-        return false;
+        serialPort.setComPortParameters(baudRate, dataBits, stopBits, parity);
+        serialPort.setFlowControl(flowControl);
+        serialPort.addDataListener(this.listener);
+        boolean b = serialPort.openPort();
+        dataWriteFile = b ? new DataWriteFile(serialPortName) : null;
+        FX.run(() -> serialPortState.set(serialPort.isOpen()));
     }
 
-    public final void write(byte[] bytes) {
+    public  int write(String msg){
+       return write(CodeFormat.utf8(msg));
+    }
+
+    public  int write(byte[] bytes) {
         if (serialPort != null && serialPort.isOpen()) {
             int sendNumber = serialPort.writeBytes(bytes, bytes.length);
             if (sendNumber > 0) {
@@ -107,20 +115,75 @@ public class SerialComm implements AutoCloseable {
                 if (sendSave)
                     Thread.startVirtualThread(() -> dataWriteFile.serialCommSend(bytes));
             }
-
+            return sendNumber;
         }
+        return -1;
     }
 
-    public final void listen(byte[] bytes) {
+    public  void listen(byte[] bytes) {
         FX.run(() -> RECEIVE_LONG_PROPERTY.set(RECEIVE_LONG_PROPERTY.get() + bytes.length));
         if (receiveSave)
             Thread.startVirtualThread(() -> dataWriteFile.serialCommReceive(bytes));
+    }
+
+    public  void clearSend() {
+        FX.run(() -> SEND_LONG_PROPERTY.set(0));
+    }
+
+    public  void clearReceive() {
+        FX.run(() -> RECEIVE_LONG_PROPERTY.set(0));
+    }
+
+    public  void setSerialPortName(String serialPortName) {
+        this.serialPortName = serialPortName;
+        openSerialPort();
+    }
+
+    public  void setBaudRate(int baudRate) {
+        this.baudRate = baudRate;
+        openSerialPort();
+    }
+
+    public  void setDataBits(int dataBits) {
+        this.dataBits = dataBits;
+        openSerialPort();
+    }
+
+    public  void setStopBits(String stopBits) {
+        this.stopBits = switch (stopBits) {
+            case "1.5" -> SerialPort.ONE_POINT_FIVE_STOP_BITS;
+            case "2" -> SerialPort.TWO_STOP_BITS;
+            default -> SerialPort.ONE_STOP_BIT;
+        };
+        openSerialPort();
+    }
+
+    public  void setParity(String parity) {
+        this.parity = switch (parity) {
+            case "奇校验" -> SerialPort.ODD_PARITY;
+            case "偶校验" -> SerialPort.EVEN_PARITY;
+            case "标记校验" -> SerialPort.MARK_PARITY;
+            case "空格校验" -> SerialPort.SPACE_PARITY;
+            default -> SerialPort.NO_PARITY;
+        };
+        openSerialPort();
+    }
+
+    public  void setFlowControl(String flowControl) {
+        this.flowControl = switch (flowControl) {
+            case "RTS/CTS" -> SerialPort.FLOW_CONTROL_RTS_ENABLED | SerialPort.FLOW_CONTROL_CTS_ENABLED;
+            case "DSR/DTR" -> SerialPort.FLOW_CONTROL_DSR_ENABLED | SerialPort.FLOW_CONTROL_DTR_ENABLED;
+            case "ON/OFF" -> SerialPort.FLOW_CONTROL_XONXOFF_IN_ENABLED | SerialPort.FLOW_CONTROL_XONXOFF_OUT_ENABLED;
+            default -> SerialPort.FLOW_CONTROL_DISABLED;
+        };
+        openSerialPort();
     }
 
     @Override
     public void close() {
         if (serialPort != null) {
             serialPort.closePort();
+            FX.run(() -> serialPortState.set(serialPort.isOpen()));
         }
     }
 }

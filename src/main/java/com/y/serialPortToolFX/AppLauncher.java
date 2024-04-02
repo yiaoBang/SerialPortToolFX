@@ -11,18 +11,20 @@ import javafx.fxml.JavaFXBuilderFactory;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 
 public class AppLauncher extends Application {
     public static final File ROOT_FILE_PATH;
+    public static final FileChooser FILE_CHOOSER = new FileChooser();
 
     static {
         ROOT_FILE_PATH = new File(System.getProperty("java.home")).getParentFile();
     }
 
-    public static JavaFXBuilderFactory javaFXBuilderFactory;
+ //   public static JavaFXBuilderFactory javaFXBuilderFactory;
 
     public static void main(String[] args) {
         System.setProperty("prism.lcdtext", "false");
@@ -34,9 +36,14 @@ public class AppLauncher extends Application {
     public void init() throws Exception {
         super.init();
         Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
-        javaFXBuilderFactory = new JavaFXBuilderFactory();
+        //javaFXBuilderFactory = new JavaFXBuilderFactory();
         //串口监控
         SerialPortMonitor.init();
+        FILE_CHOOSER.setTitle("选择json文件");
+        FILE_CHOOSER.setInitialDirectory(ROOT_FILE_PATH);
+        FILE_CHOOSER.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("json文件 (*.json)", "*.json")
+        );
     }
 
     @Override

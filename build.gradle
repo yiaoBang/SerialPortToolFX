@@ -1,32 +1,35 @@
 plugins {
     id 'java'
-    id("application")
-    id("java-library")
-    id("org.openjfx.javafxplugin") version "0.1.0"
-    id("org.beryx.jlink") version "3.0.1"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id('application')
+    id('java-library')
+    id('org.openjfx.javafxplugin') version '0.1.0'
+    id('org.beryx.jlink') version '3.0.1'
+    id('com.github.johnrengelman.shadow') version '8.1.1'
 }
 repositories {
     mavenLocal()
-    maven { url = "https://maven.aliyun.com/repository/public" }
-    maven { url = "https://maven.aliyun.com/repository/google" }
+    maven { url = 'https://maven.aliyun.com/repository/public' }
+    maven { url = 'https://maven.aliyun.com/repository/google' }
     mavenCentral()
-    maven { url = "https://jitpack.io" }
+    maven { url = 'https://jitpack.io' }
 }
 group = 'com.y.serialPortToolFX'
 version = '1.0.0'
 javafx {
-    version = "21.0.2"
-    modules = ["javafx.controls", "javafx.fxml"]
+    version = '21.0.2'
+    modules = ['javafx.controls', 'javafx.fxml']
 }
 dependencies {
     implementation 'org.projectlombok:lombok:1.18.32'
-    //annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+
     implementation 'net.java.dev.jna:jna-platform:5.14.0'
-    implementation("com.fazecast:jSerialComm:2.10.4")
-    implementation("io.github.mkpaz:atlantafx-base:2.0.1")
-    implementation("org.apache.commons:commons-text:1.11.0")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation 'com.fazecast:jSerialComm:2.10.4'
+    implementation 'io.github.mkpaz:atlantafx-base:2.0.1'
+    implementation 'org.apache.commons:commons-text:1.11.0'
+    implementation 'commons-codec:commons-codec:1.16.1'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -36,41 +39,41 @@ test {
     useJUnitPlatform()
 }
 application {
-    applicationName = "SerialPortToolFX"
-    mainClass = "com.y.serialPortToolFX.AppLauncher"
-    mainModule = "SerialPortToolFX"
-    applicationDefaultJvmArgs = ["-Dfile.encoding=UTF-8"]
+    applicationName = 'SerialPortToolFX'
+    mainClass = 'com.y.serialPortToolFX.AppLauncher'
+    mainModule = 'SerialPortToolFX'
+    applicationDefaultJvmArgs = ['-Dfile.encoding=UTF-8']
 }
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 shadowJar {
-    archiveFileName = "SerialPortToolFX.jar"
+    archiveFileName = 'SerialPortToolFX.jar'
 }
 jlink {
-    options.set(List.of("--strip-debug", "--compress", "zip-9", "--no-header-files", "--no-man-pages"))
+    options.set(List.of('--strip-debug', '--compress', 'zip-9', '--no-header-files', '--no-man-pages'))
     launcher {
         name = application.applicationName
         imageName.set(application.applicationName)
     }
-    imageZip.set(project.file("${project.getLayout().getBuildDirectory().get()}/image-zip/JavaFXSample.zip"))
+    imageZip.set(project.file('${project.getLayout().getBuildDirectory().get()}/image-zip/JavaFXSample.zip'))
     jpackage {
-        outputDir = "SerialPortToolFX-exe"
+        outputDir = 'SerialPortToolFX-exe'
         imageName = application.applicationName
         skipInstaller = false
         installerName = application.applicationName
         appVersion = version.toString()
         if (org.gradle.internal.os.OperatingSystem.current().windows) {
-            icon = "src/main/resources/application.ico"
-            installerOptions += ["--win-dir-chooser", "--win-menu", "--win-shortcut", "--win-menu-group", application.applicationName]
+            icon = 'src/main/resources/application.ico'
+            installerOptions += ['--win-dir-chooser', '--win-menu', '--win-shortcut', '--win-menu-group', application.applicationName]
         }
         if (org.gradle.internal.os.OperatingSystem.current().macOsX) {
-            icon = "src/main/resources/application.icns"
+            icon = 'src/main/resources/application.icns'
         }
         if (org.gradle.internal.os.OperatingSystem.current().linux) {
-            icon = "src/main/resources/application.png"
-            installerType = "deb"
-            installerOptions += ["--linux-deb-maintainer", "icuxika@outlook.com", "--linux-menu-group", application.applicationName, "--linux-shortcut"]
+            icon = 'src/main/resources/application.png'
+            installerType = 'deb'
+            installerOptions += ['--linux-deb-maintainer', 'icuxika@outlook.com', '--linux-menu-group', application.applicationName, '--linux-shortcut']
         }
     }
 }

@@ -1,5 +1,7 @@
 package com.y.serialPortToolFX.controller;
 
+import com.y.serialPortToolFX.serialComm.SerialComm;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -8,27 +10,23 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class Content implements AutoCloseable {
+    private final SerialComm serialComm = new SerialComm();
     @FXML
     private AnchorPane root;
-    /**
-     * 接收计数
-     */
     @FXML
     private Label receiveNumber;
-    /**
-     * 发送计数
-     */
     @FXML
     private Label sendNumber;
+    private final Timeline circularSending = new Timeline();
 
     @FXML
     void cleanReceiveNumber(MouseEvent event) {
-
+        serialComm.clearReceive();
     }
 
     @FXML
     void cleanSendNumber(MouseEvent event) {
-
+        serialComm.clearSend();
     }
 
     @FXML
@@ -48,6 +46,6 @@ public class Content implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
-
+        serialComm.close();
     }
 }

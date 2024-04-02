@@ -18,7 +18,9 @@ public class ParseJson {
     private static final Type type = new TypeToken<Map<String, String>>() {
     }.getType();
 
-    public static Map<String, byte[]> parse(File file) {
+    private final Map<String, byte[]> replays;
+
+    private static Map<String, byte[]> parse(File file) {
         try {
             List<String> strings = Files.readAllLines(file.toPath());
             StringBuilder stringBuilder = new StringBuilder();
@@ -37,5 +39,10 @@ public class ParseJson {
         } catch (IOException e) {
             return null;
         }
+    }
+
+
+    public ParseJson(File file) {
+        replays = parse(file);
     }
 }

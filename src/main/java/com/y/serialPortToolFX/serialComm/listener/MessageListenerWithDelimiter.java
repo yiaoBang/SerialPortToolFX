@@ -14,7 +14,7 @@ public class MessageListenerWithDelimiter implements SerialPortMessageListenerWi
 
     @Override
     public void catchException(Exception e) {
-
+        System.out.println(e);
     }
     @Override
     public byte[] getMessageDelimiter() {

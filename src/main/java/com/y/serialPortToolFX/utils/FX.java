@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import org.apache.commons.codec.binary.Hex;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,5 +69,9 @@ public class FX {
     }
     public static InputStream loadStream(String name) {
         return FX.class.getResourceAsStream(name);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Hex.encodeHexString(new byte[]{1,2,3,4,5}).replaceAll("..","$0 ").trim());
     }
 }
