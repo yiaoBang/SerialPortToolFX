@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane fx:id="root" prefHeight="612.0" prefWidth="805.0" stylesheets="@../css/serialport.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.y.serialPortToolFX.controller.Content">
+   <children>
+      <AnchorPane layoutX="306.0" layoutY="164.0" prefHeight="34.0" prefWidth="717.0" styleClass="top" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="50.0" layoutY="1.0" prefHeight="28.0" prefWidth="123.0" text="SerialPortToolFX" AnchorPane.bottomAnchor="3.0" AnchorPane.topAnchor="3.0" />
+            <Button layoutX="584.0" mnemonicParsing="false" onAction="#min" prefHeight="34.0" prefWidth="67.0" styleClass="min" text="—" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="67.0" AnchorPane.topAnchor="0.0" />
+            <Button layoutX="650.0" mnemonicParsing="false" onAction="#close" prefHeight="34.0" prefWidth="67.0" styleClass="exit" text="X" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <StackPane layoutX="5.0" layoutY="5.0" prefHeight="28.0" prefWidth="28.0" styleClass="ico" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="3.0">
+               <children>
+                  <Region prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </StackPane>
+         </children>
+      </AnchorPane>
+      <HBox layoutX="39.0" layoutY="572.0" prefHeight="34.0" prefWidth="662.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <HBox prefHeight="34.0" prefWidth="410.0">
+               <children>
+                  <Label prefHeight="38.0" prefWidth="58.0" styleClass="title" text="发送:" />
+                  <Label fx:id="sendNumber" onMousePressed="#cleanSendNumber" prefHeight="36.0" prefWidth="351.0" text="9223372036854775808" />
+               </children>
+            </HBox>
+            <HBox prefHeight="34.0" prefWidth="396.0">
+               <children>
+                  <Label prefHeight="39.0" prefWidth="59.0" styleClass="title" text="接收:" />
+                  <Label fx:id="receiveNumber" onMousePressed="#cleanReceiveNumber" prefHeight="37.0" prefWidth="337.0" />
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
