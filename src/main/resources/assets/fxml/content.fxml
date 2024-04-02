@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane fx:id="root" prefHeight="612.0" prefWidth="805.0" stylesheets="@../css/serialport.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.y.serialPortToolFX.controller.Content">
+<AnchorPane fx:id="root" prefHeight="612.0" prefWidth="800.0" stylesheets="@../css/serialport.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.y.serialPortToolFX.controller.Content">
    <children>
       <AnchorPane layoutX="306.0" layoutY="164.0" prefHeight="34.0" prefWidth="717.0" styleClass="top" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -23,16 +23,16 @@
       </AnchorPane>
       <HBox layoutX="39.0" layoutY="572.0" prefHeight="34.0" prefWidth="662.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <HBox prefHeight="34.0" prefWidth="410.0">
+            <HBox prefHeight="34.0" prefWidth="400.0">
                <children>
                   <Label prefHeight="38.0" prefWidth="58.0" styleClass="title" text="发送:" />
-                  <Label fx:id="sendNumber" onMousePressed="#cleanSendNumber" prefHeight="36.0" prefWidth="351.0" text="9223372036854775808" />
+                  <Label fx:id="sendNumber" onMousePressed="#cleanSendNumber" prefHeight="36.0" prefWidth="351.0" text="0" />
                </children>
             </HBox>
-            <HBox prefHeight="34.0" prefWidth="396.0">
+            <HBox prefHeight="34.0" prefWidth="400.0">
                <children>
-                  <Label prefHeight="39.0" prefWidth="59.0" styleClass="title" text="接收:" />
-                  <Label fx:id="receiveNumber" onMousePressed="#cleanReceiveNumber" prefHeight="37.0" prefWidth="337.0" />
+                  <Label prefHeight="34.0" prefWidth="55.0" styleClass="title" text="接收:" />
+                  <Label fx:id="receiveNumber" onMousePressed="#cleanReceiveNumber" prefHeight="34.0" prefWidth="345.0" text="0" />
                </children>
             </HBox>
          </children>

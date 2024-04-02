@@ -1,5 +1,6 @@
 package com.y.serialPortToolFX.serialComm.listener;
 
+import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortPacketListener;
 import com.y.serialPortToolFX.serialComm.SerialComm;
@@ -11,16 +12,14 @@ public class MessageListenerWithPacketSize implements SerialPortPacketListener {
     }
     @Override
     public int getPacketSize() {
-        return 0;
+        return serialComm.getPackSize();
     }
-
     @Override
     public int getListeningEvents() {
-        return 0;
+        return SerialPort.LISTENING_EVENT_DATA_RECEIVED;
     }
-
     @Override
     public void serialEvent(SerialPortEvent event) {
-
+        serialComm.listen(event.getReceivedData());
     }
 }
