@@ -28,9 +28,11 @@ public class FXStage {
 
         FXMLLoader loader = FX.FXMLLoader("content");
         loader.setBuilderFactory(javaFXBuilderFactory);
-        stage.getIcons().add(FX.image("ico.png"));
+        //Content content = new Content();
+        //loader.setController(content);
         Scene scene = FX.scene(loader);
         stage.setScene(scene);
+        stage.getIcons().add(FX.image("ico.png"));
         Content content = loader.getController();
 
 

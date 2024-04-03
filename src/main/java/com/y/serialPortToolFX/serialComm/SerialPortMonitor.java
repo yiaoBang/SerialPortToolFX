@@ -12,17 +12,17 @@ import java.util.Arrays;
 import java.util.StringJoiner;
 
 public class SerialPortMonitor {
-    public static SerialPort[] commPorts = SerialPort.getCommPorts();
+    public static volatile SerialPort[] commPorts = SerialPort.getCommPorts();
     private static StringJoiner sj = new StringJoiner("\n");
     public static final SimpleStringProperty serialPorts = new SimpleStringProperty(serialPortsToString());
     public static final Thread serialPortMonitorThread;
 
     static {
-        serialPorts.addListener((observable, oldValue, newValue) -> {
-            System.out.println("=========================");
-            System.out.println(newValue);
-            System.out.println("=========================");
-        });
+//        serialPorts.addListener((observable, oldValue, newValue) -> {
+//            System.out.println("=========================");
+//            System.out.println(newValue);
+//            System.out.println("=========================");
+//        });
         serialPortMonitorThread = new Thread(() -> {
             while (true) {
                 scanSerialPort();
@@ -61,7 +61,6 @@ public class SerialPortMonitor {
      * @return boolean  false=更新  true = 不更新
      */
     private static boolean checkSerialPort(SerialPort[] newPorts) {
-        System.out.println(Arrays.toString(newPorts));
         if (commPorts.length != newPorts.length) {
             return false;
         }

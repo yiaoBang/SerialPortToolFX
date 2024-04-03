@@ -1,9 +1,9 @@
 package com.y.serialPortToolFX.controller;
 
+
 import com.y.serialPortToolFX.serialComm.SerialComm;
 import com.y.serialPortToolFX.serialComm.SerialPortMonitor;
 import com.y.serialPortToolFX.utils.CodeFormat;
-import com.y.serialPortToolFX.utils.FX;
 import com.y.serialPortToolFX.utils.FXStage;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -19,11 +19,14 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Content implements AutoCloseable {
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+
+public class Content {
     private final SerialComm serialComm = new SerialComm();
     private final Timeline circularSending = new Timeline();
     private volatile long waitTime = 1000;
-    private volatile byte[] bytes;
+    private volatile byte[] bytes = "123456789".getBytes(StandardCharsets.UTF_8);
     @FXML
     private AnchorPane root;
     @FXML
@@ -86,7 +89,7 @@ public class Content implements AutoCloseable {
     @FXML
     void close(ActionEvent event) {
         ((Stage) root.getScene().getWindow()).close();
-        this.close();
+        serialComm.close();
     }
 
     @FXML
@@ -96,6 +99,7 @@ public class Content implements AutoCloseable {
 
     @FXML
     void cleanReceive(ActionEvent event) {
+        serialComm.getBuffer().close();
         receive.clear();
     }
 
@@ -181,7 +185,6 @@ public class Content implements AutoCloseable {
 
         //选择串口号
         serialPortNamePicker.setValue(serialPortNamePicker.getItems().isEmpty() ? "" : serialPortNamePicker.getItems().getFirst());
-        serialComm.openSerialPort();
 
         //延迟时间
         time.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -207,23 +210,47 @@ public class Content implements AutoCloseable {
         });
 
 
-//        //更新要发送的数据
-//        send.textProperty().addListener((observable, oldValue, newValue) -> {
-//            if (!newValue.isEmpty()) {
-//                bytes = hexSend.isSelected() ? CodeFormat.hex(newValue) : CodeFormat.utf8(newValue);
-//            } else {
-//                bytes = null;
-//            }
-//        });
-//        hexSend.selectedProperty().addListener((observable, oldValue, newValue) -> {
-//            String text = send.getText();
-//            if(!text.isEmpty()){
-//                bytes = newValue ? CodeFormat.hex(text) : CodeFormat.utf8(text);
-//            }else {
-//                bytes = null;
-//            }
-//        });
+        //更新要发送的数据
+        send.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                bytes = hexSend.isSelected() ? CodeFormat.hex(newValue) : CodeFormat.utf8(newValue);
+            } else {
+                bytes = null;
+            }
+        });
 
+        hexSend.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            String text = send.getText();
+            if (!text.isEmpty()) {
+                bytes = newValue ? CodeFormat.hex(text) : CodeFormat.utf8(text);
+            } else {
+                bytes = null;
+            }
+        });
+
+        //是否显示
+        receiveShow.selectedProperty().addListener((observable, oldValue, newValue) -> serialComm.setReceiveShow(newValue));
+        //更新显示
+        serialComm.getRECEIVE_LONG_PROPERTY().addListener((observable, oldValue, newValue) -> {
+            System.out.println(Arrays.toString(serialComm.getData()));
+            if (receiveShow.isSelected()) {
+                receive.setText(hexReceive.isSelected() ? CodeFormat.hex(serialComm.getData()) : CodeFormat.utf8(serialComm.getData()));
+            }
+        });
+        hexReceive.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!receive.getText().isEmpty()) {
+                String text = receive.getText();
+                receive.setText(newValue ? CodeFormat.utf8ToHex(text) : CodeFormat.hexToUtf8(text));
+            }
+        });
+
+        //检查串口是否还在
+        SerialPortMonitor.serialPorts.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.contains(serialComm.getSerialPortName())) {
+                serialComm.close();
+                serialPortNamePicker.setValue("");
+            }
+        });
     }
 
     public void initSerialPort(int baudRate, int dateBits, String stop, String parity, String flow) {
@@ -232,10 +259,5 @@ public class Content implements AutoCloseable {
         stopBitsPicker.setValue(stop);
         parityPicker.setValue(parity);
         flowControlPicker.setValue(flow);
-    }
-
-    @Override
-    public void close() {
-        serialComm.close();
     }
 }

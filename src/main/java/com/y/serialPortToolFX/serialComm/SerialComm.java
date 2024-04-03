@@ -12,6 +12,9 @@ import lombok.Setter;
 
 @Getter
 public final class SerialComm implements AutoCloseable {
+    //最多显示102400个接收到的字节
+    private static final int maxShowByteNumber = 102_400;
+    private final ByteBuffer buffer = new ByteBuffer(maxShowByteNumber);
     private DataWriteFile dataWriteFile;
     @Setter
     /**
@@ -23,6 +26,9 @@ public final class SerialComm implements AutoCloseable {
      * 接收保存(写入本地文件)
      */
     private volatile boolean receiveSave;
+    @Setter
+    private volatile boolean receiveShow = false;
+
     //发送的数据量
     private final SimpleLongProperty SEND_LONG_PROPERTY = new SimpleLongProperty(0);
     //接收的数据量
@@ -35,23 +41,20 @@ public final class SerialComm implements AutoCloseable {
     public static final String[] PARITY = {"无", "奇校验", "偶校验", "标记校验", "空格校验"};
     public static final String[] FLOW_CONTROL = {"无", "RTS/CTS", "DSR/DTR", "XoN/XoFF"};
 
-    //最多显示10000个接收到的字节
-    private static final int maxShowByteNumber = 102_400;
-    private final DirectByteBufferCache directByteBufferCache = new DirectByteBufferCache(maxShowByteNumber);
 
-    private volatile SerialPort serialPort;
-    private volatile String serialPortName;
-    private volatile int baudRate = 9600;
-    private volatile int dataBits = 8;
-    private volatile int stopBits = 1;
-    private volatile String stopSting = "1";
-    private volatile int parity = 0;
-    private volatile String paritySting = "无";
-    private volatile int flowControl = 0;
-    private volatile String flowControlSting = "无";
-    private volatile SerialPortDataListener listener;
-    private volatile byte[] messageDelimiter = new byte[0];
-    private volatile int packSize = 0;
+    private SerialPort serialPort;
+    private String serialPortName;
+    private int baudRate = 9600;
+    private int dataBits = 8;
+    private int stopBits = 1;
+    private String stopSting = "1";
+    private int parity = 0;
+    private String paritySting = "无";
+    private int flowControl = 0;
+    private String flowControlSting = "无";
+    private SerialPortDataListener listener;
+    private byte[] messageDelimiter = new byte[0];
+    private int packSize = 0;
 
 
     public SerialComm() {
@@ -83,7 +86,7 @@ public final class SerialComm implements AutoCloseable {
 
     public void findSerialPort() {
         close();
-        for (SerialPort serial : SerialPortMonitor.commPorts) {
+        for (SerialPort serial : SerialPort.getCommPorts()) {
             if (serial.getSystemPortName().equals(serialPortName)) {
                 serialPort = serial;
                 return;
@@ -103,7 +106,7 @@ public final class SerialComm implements AutoCloseable {
         serialPort.addDataListener(this.listener);
         boolean b = serialPort.openPort();
         dataWriteFile = b ? new DataWriteFile(serialPortName) : null;
-        FX.run(() -> serialPortState.set(serialPort.isOpen()));
+        FX.run(() -> serialPortState.set(b));
     }
 
     public void write(byte[] bytes) {
@@ -118,9 +121,15 @@ public final class SerialComm implements AutoCloseable {
     }
 
     public void listen(byte[] bytes) {
+        if (receiveShow)
+            buffer.add(bytes);
         FX.run(() -> RECEIVE_LONG_PROPERTY.set(RECEIVE_LONG_PROPERTY.get() + bytes.length));
         if (receiveSave)
             Thread.startVirtualThread(() -> dataWriteFile.serialCommReceive(bytes));
+    }
+
+    public byte[] getData() {
+        return buffer.getBuffer();
     }
 
     public void clearSend() {
@@ -183,7 +192,7 @@ public final class SerialComm implements AutoCloseable {
     public void close() {
         if (serialPort != null) {
             serialPort.closePort();
-            FX.run(() -> serialPortState.set(serialPort.isOpen()));
         }
+        FX.run(() -> serialPortState.set(false));
     }
 }

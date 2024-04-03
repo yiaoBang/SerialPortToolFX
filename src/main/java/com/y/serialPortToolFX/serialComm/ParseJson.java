@@ -3,7 +3,6 @@ package com.y.serialPortToolFX.serialComm;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.text.StringEscapeUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;

@@ -106,8 +106,8 @@
             </HBox>
          </children>
       </HBox>
-      <TextArea fx:id="send" layoutX="6.0" layoutY="404.0" prefHeight="88.0" prefWidth="500.0" wrapText="true" />
       <CheckBox fx:id="hexSend" layoutX="6.0" layoutY="497.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="87.0" text="HEX发送" />
       <CheckBox fx:id="hexReceive" layoutX="636.0" layoutY="368.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="87.0" text="HEX显示" />
+      <TextArea fx:id="send" layoutX="6.0" layoutY="407.0" prefHeight="84.0" prefWidth="500.0" />
    </children>
 </AnchorPane>
