@@ -1,0 +1,6 @@
+{
+  "encode": "HEX",
+  "packSize": "",
+  "delimiter": "0D 0A",
+  "01 02 03 04 0D 0A": "FF FE FD FC 0D 0A"
+}

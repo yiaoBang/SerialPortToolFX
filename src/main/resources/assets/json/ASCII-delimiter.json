@@ -1,0 +1,6 @@
+{
+  "encode": "ASCII",
+  "packSize": "",
+  "delimiter": "\r\n",
+  "ABCD\r\n": "ABCD\r\n"
+}
