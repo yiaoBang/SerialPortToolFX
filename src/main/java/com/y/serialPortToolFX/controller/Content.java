@@ -23,7 +23,6 @@ import java.io.File;
 import static com.y.serialPortToolFX.AppLauncher.FILE_CHOOSER;
 
 public class Content {
-
     private final SerialComm serialComm = new SerialComm();
     private final Timeline circularSending = new Timeline();
     private volatile long waitTime = 1000;

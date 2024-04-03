@@ -65,12 +65,6 @@ public final class SerialComm implements AutoCloseable {
         this.listener = new MessageListenerWithDelimiter(this);
     }
 
-
-    public SerialComm(byte[] messageDelimiter) {
-        this.messageDelimiter = messageDelimiter;
-        this.listener = new MessageListenerWithDelimiter(this);
-    }
-
     public void updateListener(byte[] messageDelimiter) {
         if (messageDelimiter != null) {
             this.messageDelimiter = messageDelimiter;

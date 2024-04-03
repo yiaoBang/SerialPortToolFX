@@ -29,7 +29,10 @@ public final class MockResponses {
     }
 
     public byte[] reply(byte[] bytes) {
-        return replays.get(CodeFormat.utf8(bytes));
+        System.out.println(CodeFormat.utf8(bytes));
+        byte[] bytes1 = replays.get(CodeFormat.utf8(bytes));
+        System.out.println(bytes1==null);
+        return bytes1;
     }
 
     public static MockResponses parseJson(File file) {
@@ -81,9 +84,13 @@ public final class MockResponses {
                 } catch (NumberFormatException e) {
                     mockResponses.setDelimiter(CodeFormat.utf8(delimiter));
                 }
-                maps.forEach((k, v) -> replay.put(Arrays.toString(CodeFormat.utf8(k)), CodeFormat.utf8(v)));
+                maps.forEach((k, v) -> replay.put(CodeFormat.utf8(CodeFormat.utf8(k)), CodeFormat.utf8(v)));
                 mockResponses.setReplays(replay);
             }
+            replay.forEach((k,v)->{
+                System.out.println("k = " + k);
+                System.out.println("v = " + Arrays.toString(v));
+            });
             return mockResponses;
         } catch (IOException e) {
             return null;
