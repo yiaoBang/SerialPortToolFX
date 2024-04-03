@@ -5,13 +5,14 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class CodeFormat {
     private CodeFormat() {
     }
 
     public static String utf8(byte[] bytes) {
-        return new String(bytes, StandardCharsets.UTF_8);
+        return Arrays.toString(bytes);
     }
 
     public static byte[] utf8(String msg) {

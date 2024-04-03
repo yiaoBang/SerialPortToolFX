@@ -1,6 +1,7 @@
 package com.y.serialPortToolFX.controller;
 
 
+import com.y.serialPortToolFX.serialComm.MockResponses;
 import com.y.serialPortToolFX.serialComm.SerialComm;
 import com.y.serialPortToolFX.serialComm.SerialPortMonitor;
 import com.y.serialPortToolFX.utils.CodeFormat;
@@ -19,14 +20,12 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-
 public class Content {
+
     private final SerialComm serialComm = new SerialComm();
     private final Timeline circularSending = new Timeline();
     private volatile long waitTime = 1000;
-    private volatile byte[] bytes = "123456789".getBytes(StandardCharsets.UTF_8);
+    private volatile byte[] bytes;
     @FXML
     private AnchorPane root;
     @FXML
@@ -193,6 +192,7 @@ public class Content {
                 if (waitTime < 1) {
                     waitTime = 1;
                 }
+                serialComm.setWaitTime(waitTime);
             } catch (NumberFormatException e) {
                 time.setText(oldValue);
             }
@@ -232,7 +232,6 @@ public class Content {
         receiveShow.selectedProperty().addListener((observable, oldValue, newValue) -> serialComm.setReceiveShow(newValue));
         //更新显示
         serialComm.getRECEIVE_LONG_PROPERTY().addListener((observable, oldValue, newValue) -> {
-            System.out.println(Arrays.toString(serialComm.getData()));
             if (receiveShow.isSelected()) {
                 receive.setText(hexReceive.isSelected() ? CodeFormat.hex(serialComm.getData()) : CodeFormat.utf8(serialComm.getData()));
             }

@@ -15,6 +15,10 @@ public final class SerialComm implements AutoCloseable {
     //最多显示102400个接收到的字节
     private static final int maxShowByteNumber = 102_400;
     private final ByteBuffer buffer = new ByteBuffer(maxShowByteNumber);
+    //模拟回复
+    private MockResponses mockResponses;
+    @Setter
+    private volatile long waitTime = 1000;
     private DataWriteFile dataWriteFile;
     @Setter
     /**
@@ -56,10 +60,10 @@ public final class SerialComm implements AutoCloseable {
     private byte[] messageDelimiter = new byte[0];
     private int packSize = 0;
 
-
     public SerialComm() {
         this.listener = new MessageListenerWithDelimiter(this);
     }
+
 
     public SerialComm(byte[] messageDelimiter) {
         this.messageDelimiter = messageDelimiter;
@@ -121,6 +125,20 @@ public final class SerialComm implements AutoCloseable {
     }
 
     public void listen(byte[] bytes) {
+        //模拟回复
+        if (mockResponses != null) {
+            Thread.startVirtualThread(() -> {
+                byte[] reply = mockResponses.reply(bytes);
+                if (reply != null) {
+                    try {
+                        Thread.sleep(waitTime);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    write(reply);
+                }
+            });
+        }
         if (receiveShow)
             buffer.add(bytes);
         FX.run(() -> RECEIVE_LONG_PROPERTY.set(RECEIVE_LONG_PROPERTY.get() + bytes.length));
