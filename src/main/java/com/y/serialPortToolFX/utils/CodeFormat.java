@@ -12,7 +12,7 @@ public class CodeFormat {
     }
 
     public static String utf8(byte[] bytes) {
-        return Arrays.toString(bytes);
+        return new String(bytes,StandardCharsets.UTF_8);
     }
 
     public static byte[] utf8(String msg) {
