@@ -2,6 +2,7 @@ package com.y.serialPortToolFX.utils;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.nio.charset.StandardCharsets;
 
@@ -14,7 +15,7 @@ public class CodeFormat {
     }
 
     public static byte[] utf8(String msg) {
-        return msg.getBytes(StandardCharsets.UTF_8);
+        return StringEscapeUtils.unescapeJava(msg).getBytes(StandardCharsets.UTF_8);
     }
 
     public static String hex(byte[] bytes) {
@@ -25,7 +26,7 @@ public class CodeFormat {
         try {
             return Hex.decodeHex(msg.replaceAll("\\s+", ""));
         } catch (DecoderException e) {
-            throw new RuntimeException(e);
+            return null;
         }
     }
 

@@ -42,7 +42,14 @@
 .exit:hover {
     -fx-background-color: #b71515;
 }
-
+/* 设置下拉列表中选项的文本居中对齐 */
+.combo-box .list-cell {
+    -fx-alignment: center;
+}
+/* 设置选择按钮中的文本居中对齐 */
+.combo-box .list-cell:filled:selected .text {
+    -fx-alignment: center;
+}
 .title {
     -fx-background-color: #FF00008B;
     -fx-pref-width: 55;
@@ -54,5 +61,14 @@
     -fx-font-size: 22;
     -fx-pref-width: 345;
     -fx-pref-height: 34;
+}
+#time{
+    -fx-alignment: center;
+    -fx-padding: 0;
+    -fx-pref-height: 27;
+}
+#receive{
+    -fx-background-color: black;
+    -fx-text-fill: rgb(0, 255, 0);
 }
 

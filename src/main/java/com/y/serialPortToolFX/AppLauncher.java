@@ -24,7 +24,7 @@ public class AppLauncher extends Application {
         ROOT_FILE_PATH = new File(System.getProperty("java.home")).getParentFile();
     }
 
- //   public static JavaFXBuilderFactory javaFXBuilderFactory;
+    public static JavaFXBuilderFactory javaFXBuilderFactory;
 
     public static void main(String[] args) {
         System.setProperty("prism.lcdtext", "false");
@@ -36,7 +36,7 @@ public class AppLauncher extends Application {
     public void init() throws Exception {
         super.init();
         Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
-        //javaFXBuilderFactory = new JavaFXBuilderFactory();
+        javaFXBuilderFactory = new JavaFXBuilderFactory();
         //串口监控
         SerialPortMonitor.init();
         FILE_CHOOSER.setTitle("选择json文件");
@@ -47,8 +47,15 @@ public class AppLauncher extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        FXStage.create(FX.scene("content")).show();
+    public void start(Stage primaryStage) {
+        FXStage.create().getStage().show();
+    }
+    public static void createNewStage(int baudRate,int dateBits,String stop,String parity,String flow){
+        Stage stage = new Stage();
+        FXMLLoader loader = FX.FXMLLoader("content");
+        loader.setBuilderFactory(javaFXBuilderFactory);
+        stage.setScene(FX.scene(loader));
+
     }
 
     @Override
