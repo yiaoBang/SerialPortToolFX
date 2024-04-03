@@ -16,6 +16,7 @@ public final class SerialComm implements AutoCloseable {
     private static final int maxShowByteNumber = 102_400;
     private final ByteBuffer buffer = new ByteBuffer(maxShowByteNumber);
     //模拟回复
+    @Setter
     private MockResponses mockResponses;
     @Setter
     private volatile long waitTime = 1000;

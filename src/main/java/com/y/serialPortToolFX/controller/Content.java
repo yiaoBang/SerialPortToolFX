@@ -15,10 +15,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.File;
+
+import static com.y.serialPortToolFX.AppLauncher.FILE_CHOOSER;
 
 public class Content {
 
@@ -79,7 +84,8 @@ public class Content {
     //串口开关
     @FXML
     private Button serialPortSwitch;
-
+    @FXML
+    private Circle analogLight;
     @FXML
     void min(ActionEvent event) {
         ((Stage) root.getScene().getWindow()).setIconified(true);
@@ -93,7 +99,25 @@ public class Content {
 
     @FXML
     void analogReply(ActionEvent event) {
-
+        File file = FILE_CHOOSER.showOpenDialog(root.getScene().getWindow());
+        if (file != null) {
+            MockResponses mockResponses = MockResponses.parseJson(file);
+            if (mockResponses == null) {
+                analogLight.setFill(Color.RED);
+                serialComm.setMockResponses(null);
+            } else {
+                analogLight.setFill(Color.LIME);
+                if (mockResponses.getPackSize() > 0) {
+                    serialComm.updateListener(mockResponses.getPackSize());
+                } else {
+                    serialComm.updateListener(mockResponses.getDelimiter());
+                }
+                serialComm.setMockResponses(mockResponses);
+            }
+        } else {
+            serialComm.setMockResponses(null);
+            analogLight.setFill(Color.RED);
+        }
     }
 
     @FXML

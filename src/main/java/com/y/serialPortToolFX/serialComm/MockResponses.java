@@ -5,12 +5,10 @@ import com.google.gson.reflect.TypeToken;
 import com.y.serialPortToolFX.utils.CodeFormat;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,14 +22,17 @@ public final class MockResponses {
     private static final Type type = new TypeToken<Map<String, String>>() {
     }.getType();
     private int packSize = 0;
-    private byte[] delimiterByte;
+    private byte[] delimiter;
     private Map<String, byte[]> replays;
+
+    private MockResponses() {
+    }
 
     public byte[] reply(byte[] bytes) {
         return replays.get(Arrays.toString(bytes));
     }
 
-    private static MockResponses parseJson(File file) {
+    public static MockResponses parseJson(File file) {
         try {
             MockResponses mockResponses = new MockResponses();
             List<String> strings = Files.readAllLines(file.toPath());
@@ -51,6 +52,14 @@ public final class MockResponses {
             maps.remove("delimiter");
             maps.remove("packSize");
 
+            //如果数据包大小和结束符都是空的 则不必继续
+            if (packSize.isEmpty() && delimiter.isEmpty()) {
+                return null;
+            }
+            if(maps.isEmpty()){
+                return null;
+            }
+
 
             //回复的数据
             Map<String, byte[]> replay = new HashMap<>();
@@ -62,7 +71,7 @@ public final class MockResponses {
                     byte[] hex = CodeFormat.hex(delimiter);
                     if (hex == null)
                         return null;
-                    mockResponses.setDelimiterByte(hex);
+                    mockResponses.setDelimiter(hex);
                 }
                 maps.forEach((k, v) -> replay.put(CodeFormat.hexToUtf8(k), CodeFormat.hex(v)));
                 mockResponses.setReplays(replay);
@@ -70,7 +79,7 @@ public final class MockResponses {
                 try {
                     mockResponses.setPackSize(Integer.parseInt(packSize));
                 } catch (NumberFormatException e) {
-                    mockResponses.setDelimiterByte(CodeFormat.utf8(delimiter));
+                    mockResponses.setDelimiter(CodeFormat.utf8(delimiter));
                 }
                 maps.forEach((k, v) -> replay.put(CodeFormat.utf8(CodeFormat.utf8(k)), CodeFormat.utf8(v)));
                 mockResponses.setReplays(replay);
