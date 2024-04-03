@@ -4,7 +4,6 @@ open module SerialPortToolFX.main {
     requires atlantafx.base;
     requires com.google.gson;
     requires org.apache.commons.text;
-    requires org.apache.commons.lang3;
     requires org.apache.commons.codec;
     requires com.fazecast.jSerialComm;
     requires lombok;

@@ -2,9 +2,7 @@
 
 ## 模拟回复
 
-json配置:
-
-key 和 value  都是字符串
+### json配置格式:
 
 ```json
 {
@@ -15,15 +13,21 @@ key 和 value  都是字符串
 }
 ```
 
-encode: 用于指示json中的编码格式   可选参数有    HEX     ASCII
+### json文件内容要求:
 
-packSize:用于指定数据包大小
+1. json只能有一层,不可以有多层
+2. json的键值对都是字符串类型(都用 " " 包裹)
+3. json中的encode用于指示json文件中编码格式  
+   - 目前可供选择的参数(不区分大小写)有 **HEX  ASCII**
+   - 如果encode 指定为  HEX  则下文中的键值对都以16进制进行解码
+   - 如果encode 指定为  ASCII则下文中的键值对都以ASCII进行解码
+4. json文件中的packSize和delimiter用于指定串口消息的完整度判断方式
+   - packSize表示用数据包的长度来判断消息完整度
+   - delimiter表示用特定符号来判断消息完整度
+   - **如果同时指定了packSize 和 delimiter  那么delimiter将会被忽略 除非 packSize的内容不正确(非数字)**
+   - **packSize 和 delimiter 不能都为空**
 
- delimiter:指定消息分隔符
-
-注意:如果指定了packSize那么delimiter的结果将被忽略
-
-配置示例:
+### json配置示例:
 
 使用ASCII并且使用数据包大小来断帧
 
@@ -37,18 +41,6 @@ packSize:用于指定数据包大小
 }
 ```
 
-使用HEX并且使用数据包大小来断帧
-
-```json
-{
-  "encode": "HEX",
-  "packSize": "5",
-  "delimiter": "",
-  "F1 F2 F3 F4 F5":"01 02 03 04 05",
-  "F0 F2 F3 F4 F5":"01 02 03 04 05"
-}
-```
-
 使用ASCII并且使用结束符来断帧
 
 ```json
@@ -58,6 +50,22 @@ packSize:用于指定数据包大小
   "delimiter": "\r\n",
   "A\r\n":"B\r\n",
    "AAAA\r\n":"BAAA\r\n"
+}
+```
+
+
+
+
+
+使用HEX并且使用数据包大小来断帧
+
+```json
+{
+  "encode": "HEX",
+  "packSize": "5",
+  "delimiter": "",
+  "F1 F2 F3 F4 F5":"01 02 03 04 05",
+  "F0 F2 F3 F4 F5":"01 02 03 04 05"
 }
 ```
 
