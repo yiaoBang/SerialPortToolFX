@@ -12,8 +12,8 @@ import lombok.Setter;
 
 @Getter
 public final class SerialComm implements AutoCloseable {
-    //最多显示102400个接收到的字节
-    private static final int maxShowByteNumber = 102_400;
+    //最多显示51200个接收到的字节
+    private static final int maxShowByteNumber = 12800;
     private final ByteBuffer buffer = new ByteBuffer(maxShowByteNumber);
     //模拟回复
     @Setter

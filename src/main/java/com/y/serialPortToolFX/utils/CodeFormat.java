@@ -20,7 +20,7 @@ public class CodeFormat {
     }
 
     public static String hex(byte[] bytes) {
-        return Hex.encodeHexString(bytes).replaceAll("..", "$0 ").trim();
+        return Hex.encodeHexString(bytes,false).replaceAll("..", "$0 ").trim();
     }
 
     public static byte[] hex(String msg) {

@@ -19,7 +19,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 import java.io.File;
+
 import static com.y.serialPortToolFX.AppLauncher.FILE_CHOOSER;
 
 public class Content {
@@ -82,6 +84,7 @@ public class Content {
     private Button serialPortSwitch;
     @FXML
     private Circle analogLight;
+
     @FXML
     void min(ActionEvent event) {
         ((Stage) root.getScene().getWindow()).setIconified(true);
@@ -129,9 +132,12 @@ public class Content {
 
     @FXML
     void createStage(ActionEvent event) {
+        Stage window = (Stage) root.getScene().getWindow();
         FXStage fxStage = FXStage.create();
-        fxStage.getStage().show();
         fxStage.getContent().initSerialPort(serialComm.getBaudRate(), serialComm.getDataBits(), serialComm.getStopSting(), serialComm.getParitySting(), serialComm.getFlowControlSting());
+        fxStage.getStage().setX(window.getX() + 100);
+        fxStage.getStage().setY(window.getY() + 100);
+        fxStage.getStage().show();
     }
 
     @FXML
@@ -250,16 +256,19 @@ public class Content {
 
         //是否显示
         receiveShow.selectedProperty().addListener((observable, oldValue, newValue) -> serialComm.setReceiveShow(newValue));
+
         //更新显示
         serialComm.getRECEIVE_LONG_PROPERTY().addListener((observable, oldValue, newValue) -> {
             if (receiveShow.isSelected()) {
                 receive.setText(hexReceive.isSelected() ? CodeFormat.hex(serialComm.getData()) : CodeFormat.utf8(serialComm.getData()));
+                receive.setScrollTop(Double.MAX_VALUE);
             }
         });
         hexReceive.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (!receive.getText().isEmpty()) {
                 String text = receive.getText();
                 receive.setText(newValue ? CodeFormat.utf8ToHex(text) : CodeFormat.hexToUtf8(text));
+               receive.setScrollTop(Double.MAX_VALUE);
             }
         });
 

@@ -1,16 +1,11 @@
 package com.y.serialPortToolFX;
 
 import atlantafx.base.theme.PrimerLight;
-import com.y.serialPortToolFX.utils.FX;
-import com.y.serialPortToolFX.utils.FXStage;
 import com.y.serialPortToolFX.serialComm.SerialPortMonitor;
+import com.y.serialPortToolFX.utils.FXStage;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -45,19 +40,10 @@ public class AppLauncher extends Application {
                 new FileChooser.ExtensionFilter("json文件 (*.json)", "*.json")
         );
     }
-
     @Override
     public void start(Stage primaryStage) {
         FXStage.create().getStage().show();
     }
-    public static void createNewStage(int baudRate,int dateBits,String stop,String parity,String flow){
-        Stage stage = new Stage();
-        FXMLLoader loader = FX.FXMLLoader("content");
-        loader.setBuilderFactory(javaFXBuilderFactory);
-        stage.setScene(FX.scene(loader));
-
-    }
-
     @Override
     public void stop() throws Exception {
         super.stop();
