@@ -228,7 +228,12 @@ public class Content {
             if (newValue) {
                 //清理帧
                 circularSending.getKeyFrames().clear();
-                circularSending.getKeyFrames().add(new KeyFrame(Duration.millis(waitTime), s -> serialComm.write(bytes)));
+                circularSending.getKeyFrames().add(new KeyFrame(Duration.millis(waitTime), s -> {
+                    if (serialComm.write(bytes) < 1) {
+                        circularSending.stop();
+                        timedDispatch.setSelected(false);
+                    }
+                }));
                 circularSending.play();
             } else {
                 circularSending.stop();
@@ -268,7 +273,7 @@ public class Content {
             if (!receive.getText().isEmpty()) {
                 String text = receive.getText();
                 receive.setText(newValue ? CodeFormat.utf8ToHex(text) : CodeFormat.hexToUtf8(text));
-               receive.setScrollTop(Double.MAX_VALUE);
+                receive.setScrollTop(Double.MAX_VALUE);
             }
         });
 

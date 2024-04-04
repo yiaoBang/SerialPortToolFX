@@ -108,15 +108,19 @@ public final class SerialComm implements AutoCloseable {
         FX.run(() -> serialPortState.set(b));
     }
 
-    public void write(byte[] bytes) {
+    public int write(byte[] bytes) {
         if (bytes != null && serialPort != null && serialPort.isOpen()) {
             int sendNumber = serialPort.writeBytes(bytes, bytes.length);
             if (sendNumber > 0) {
                 FX.run(() -> SEND_LONG_PROPERTY.set(SEND_LONG_PROPERTY.get() + sendNumber));
                 if (sendSave)
                     Thread.startVirtualThread(() -> dataWriteFile.serialCommSend(bytes));
+            } else {
+                this.close();
             }
+            return sendNumber;
         }
+        return 0;
     }
 
     public void listen(byte[] bytes) {

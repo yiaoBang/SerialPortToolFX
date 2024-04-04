@@ -8,7 +8,6 @@ import javafx.application.Platform;
 import javafx.fxml.JavaFXBuilderFactory;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 
 public class AppLauncher extends Application {
