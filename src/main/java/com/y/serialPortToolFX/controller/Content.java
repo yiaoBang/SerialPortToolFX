@@ -19,9 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.File;
-
 import static com.y.serialPortToolFX.AppLauncher.FILE_CHOOSER;
 
 public class Content {

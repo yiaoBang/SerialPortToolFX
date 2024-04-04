@@ -7,8 +7,8 @@ open module SerialPortToolFX.main {
     requires org.apache.commons.codec;
     requires com.fazecast.jSerialComm;
     requires lombok;
-    requires com.sun.jna;
-    requires com.sun.jna.platform;
+//    requires com.sun.jna;
+//    requires com.sun.jna.platform;
 
 
     exports com.y.serialPortToolFX;
