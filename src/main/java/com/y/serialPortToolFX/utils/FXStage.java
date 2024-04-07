@@ -9,7 +9,7 @@ import lombok.Getter;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.y.serialPortToolFX.AppLauncher.javaFXBuilderFactory;
+import static com.y.serialPortToolFX.AppLauncher.JAVAFX_BUILDER_FACTORY;
 
 @Getter
 public class FXStage {
@@ -27,7 +27,7 @@ public class FXStage {
         Stage stage = new Stage(StageStyle.TRANSPARENT);
 
         FXMLLoader loader = FX.FXMLLoader("content");
-        loader.setBuilderFactory(javaFXBuilderFactory);
+        loader.setBuilderFactory(JAVAFX_BUILDER_FACTORY);
         //Content content = new Content();
         //loader.setController(content);
         Scene scene = FX.scene(loader);
