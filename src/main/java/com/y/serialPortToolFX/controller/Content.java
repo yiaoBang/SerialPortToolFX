@@ -180,7 +180,7 @@ public class Content {
         //串口指示灯绑定
         serialPortLight.fillProperty().bind(serialComm.getSerialPortState().map(state -> state ? Color.LIME : Color.RED));
 
-
+        //初始化列表
         baudRatePicker.setValue(serialComm.getBaudRate());
         dataBitsPicker.setValue(serialComm.getDataBits());
         stopBitsPicker.setValue(serialComm.getStopSting());
@@ -247,7 +247,7 @@ public class Content {
                 bytes = null;
             }
         });
-
+        //16进制发送
         hexSend.selectedProperty().addListener((observable, oldValue, newValue) -> {
             String text = send.getText();
             if (!text.isEmpty()) {
@@ -267,12 +267,11 @@ public class Content {
                 receive.setScrollTop(Double.MAX_VALUE);
             }
         });
+        //16进制接收显示
         hexReceive.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (!receive.getText().isEmpty()) {
-                String text = receive.getText();
-                receive.setText(newValue ? CodeFormat.utf8ToHex(text) : CodeFormat.hexToUtf8(text));
-                receive.setScrollTop(Double.MAX_VALUE);
-            }
+            byte[] data = serialComm.getData();
+            receive.setText(newValue ? CodeFormat.hex(data) : CodeFormat.utf8(data));
+            receive.setScrollTop(Double.MAX_VALUE);
         });
 
         //检查串口是否还在
