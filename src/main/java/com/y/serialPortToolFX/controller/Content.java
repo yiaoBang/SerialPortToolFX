@@ -101,6 +101,7 @@ public class Content {
             MockResponses mockResponses = MockResponses.parseJson(file);
             if (mockResponses == null) {
                 analogLight.setFill(Color.RED);
+                serialComm.updateListener(new byte[0]);
                 serialComm.setMockResponses(null);
             } else {
                 analogLight.setFill(Color.LIME);
@@ -113,6 +114,7 @@ public class Content {
             }
         } else {
             serialComm.setMockResponses(null);
+            serialComm.updateListener(new byte[0]);
             analogLight.setFill(Color.RED);
         }
     }
@@ -282,7 +284,6 @@ public class Content {
             }
         });
     }
-
     public void initSerialPort(int baudRate, int dateBits, String stop, String parity, String flow) {
         baudRatePicker.setValue(baudRate);
         dataBitsPicker.setValue(dateBits);
