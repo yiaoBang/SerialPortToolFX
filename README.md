@@ -109,4 +109,20 @@
      "01 03 0D 0A":"01 03 05 0D 0A"
    }
    ```
+   
+   ## 编译打包
+   
+   ### 环境要求
+   
+   - java21+(需要用到虚拟线程)
+   - gradle(对应java版本)
+   
+   ### 执行指令
+   
+   ```powershell
+   gradle clean
+   gradle jpackageimage
+   ```
+   
+   
 
