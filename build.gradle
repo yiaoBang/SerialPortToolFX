@@ -24,7 +24,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
 
-    implementation 'net.java.dev.jna:jna-platform:5.14.0'
+    // implementation 'net.java.dev.jna:jna-platform:5.14.0'
     implementation 'com.fazecast:jSerialComm:2.10.4'
     implementation 'io.github.mkpaz:atlantafx-base:2.0.1'
     implementation 'org.apache.commons:commons-text:1.11.0'
@@ -53,15 +53,15 @@ shadowJar {
 jlink {
     options.set(List.of('--strip-debug', '--compress', 'zip-9', '--no-header-files', '--no-man-pages'))
     launcher {
-        name = application.applicationName
+        name = application.applicationName + version
         imageName.set(application.applicationName)
     }
     imageZip.set(project.file('${project.getLayout().getBuildDirectory().get()}/image-zip/JavaFXSample.zip'))
     jpackage {
-        outputDir = 'SerialPortToolFX-exe'
-        imageName = application.applicationName
+        outputDir = 'jpackage'
+        imageName = application.applicationName + "-" + version
         skipInstaller = false
-        installerName = application.applicationName
+        installerName = application.applicationName + "-" + version
         appVersion = version.toString()
         if (org.gradle.internal.os.OperatingSystem.current().windows) {
             icon = 'src/main/resources/application.ico'

@@ -11,7 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.StringJoiner;
 
 /**
  * @author Y
@@ -19,7 +18,7 @@ import java.util.StringJoiner;
  * @date 2024/3/23 14:56
  */
 public class DataWriteFile {
-    private static final File dataFile = new File(AppLauncher.ROOT_FILE_PATH, "串口收发记录");
+    private static final File dataFile = new File(AppLauncher.ROOT_FILE_PATH, "logs");
 
     static {
         if (!dataFile.exists()) {

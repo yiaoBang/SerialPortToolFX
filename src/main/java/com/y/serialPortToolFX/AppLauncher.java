@@ -25,6 +25,7 @@ public class AppLauncher extends Application {
     @Override
     public void init() throws Exception {
         super.init();
+        //加载主题
         Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
         JAVAFX_BUILDER_FACTORY = new JavaFXBuilderFactory();
         //初始化文件选择器
