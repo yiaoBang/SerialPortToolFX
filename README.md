@@ -8,6 +8,8 @@
 
 ![scene](scene.png)
 
+**注意:计数清0,只需在对应的数字上鼠标左键单击即可**
+
 ## 依赖
 
 - [lombok](https://github.com/projectlombok/lombok)
