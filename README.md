@@ -10,6 +10,7 @@
 
 ## 依赖
 
+- [lombok](https://github.com/projectlombok/lombok)
 - [javafx](https://github.com/openjdk/jfx)
 - [atlantafx](https://github.com/mkpaz/atlantafx)
 - [jSerialComm](https://github.com/Fazecast/jSerialComm)
