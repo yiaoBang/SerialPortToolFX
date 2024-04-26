@@ -1,7 +1,7 @@
 open module SerialPortToolFX.main {
     requires javafx.fxml;
     requires javafx.controls;
-    requires atlantafx.base;
+    //requires atlantafx.base;
     requires com.google.gson;
     requires org.apache.commons.text;
     requires org.apache.commons.codec;
