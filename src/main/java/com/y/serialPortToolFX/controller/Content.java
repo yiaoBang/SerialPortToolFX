@@ -273,6 +273,7 @@ public class Content {
         hexReceive.selectedProperty().addListener((observable, oldValue, newValue) -> {
             byte[] data = serialComm.getData();
             receive.setText(newValue ? CodeFormat.hex(data) : CodeFormat.utf8(data));
+            //滚动条自动滚动
             receive.setScrollTop(Double.MAX_VALUE);
         });
 

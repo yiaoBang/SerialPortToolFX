@@ -8,15 +8,15 @@ plugins {
 }
 repositories {
     mavenLocal()
-    maven { url = 'https://maven.aliyun.com/repository/public' }
-    maven { url = 'https://maven.aliyun.com/repository/google' }
+//    maven { url = 'https://maven.aliyun.com/repository/public' }
+//    maven { url = 'https://maven.aliyun.com/repository/google' }
     mavenCentral()
     maven { url = 'https://jitpack.io' }
 }
 group = 'com.y.serialPortToolFX'
 version = '1.0.0'
 javafx {
-    version = '21.0.2'
+    version = '22'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 dependencies {
@@ -25,9 +25,9 @@ dependencies {
 
 
     // implementation 'net.java.dev.jna:jna-platform:5.14.0'
-    implementation 'com.fazecast:jSerialComm:2.10.4'
+    implementation 'com.fazecast:jSerialComm:2.11.0'
     implementation 'io.github.mkpaz:atlantafx-base:2.0.1'
-    implementation 'org.apache.commons:commons-text:1.11.0'
+    implementation 'org.apache.commons:commons-text:1.12.0'
     implementation 'commons-codec:commons-codec:1.16.1'
     implementation 'com.google.code.gson:gson:2.10.1'
 
@@ -47,6 +47,7 @@ application {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
+
 shadowJar {
     archiveFileName = 'SerialPortToolFX.jar'
 }
