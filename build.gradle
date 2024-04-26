@@ -16,7 +16,7 @@ repositories {
 group = 'com.y.serialPortToolFX'
 version = '1.0.0'
 javafx {
-    version = '22'
+    version = '21.0.2'
     modules = ['javafx.controls', 'javafx.fxml']
 }
 dependencies {

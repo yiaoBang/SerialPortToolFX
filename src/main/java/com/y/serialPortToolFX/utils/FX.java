@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import org.apache.commons.codec.binary.Hex;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
