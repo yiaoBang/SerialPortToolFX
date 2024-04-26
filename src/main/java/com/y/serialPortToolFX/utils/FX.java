@@ -43,9 +43,7 @@ public class FX {
     public static Node node(String fxml) {
         return parent(fxml);
     }
-    public static String themePrimerLight(){
-        return "/assets/theme/primer-light.css";
-    }
+
     public static Scene scene(FXMLLoader loader) {
         Scene scene = null;
         try {
