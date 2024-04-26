@@ -1,14 +1,15 @@
 package com.y.serialPortToolFX;
 
 import com.y.serialPortToolFX.serialComm.SerialPortMonitor;
+import com.y.serialPortToolFX.utils.FX;
 import com.y.serialPortToolFX.utils.FXStage;
 import com.y.serialPortToolFX.utils.Theme;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.JavaFXBuilderFactory;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 
 public class AppLauncher extends Application {
@@ -26,6 +27,8 @@ public class AppLauncher extends Application {
     @Override
     public void init() throws Exception {
         super.init();
+        //加载字体
+        Font.loadFont(FX.loadStream("/assets/fonts/HONORSansCN-Medium.ttf"),0);
         //加载主题
         Application.setUserAgentStylesheet(Theme.PRIMER_LIGHT.getCss());
         JAVAFX_BUILDER_FACTORY = new JavaFXBuilderFactory();
