@@ -27,8 +27,6 @@ public class AppLauncher extends Application {
     @Override
     public void init() throws Exception {
         super.init();
-        //加载字体
-        Font.loadFont(FX.loadStream("/assets/fonts/HONORSansCN-Medium.ttf"),0);
         //加载主题
         Application.setUserAgentStylesheet(Theme.PRIMER_LIGHT.getCss());
         JAVAFX_BUILDER_FACTORY = new JavaFXBuilderFactory();

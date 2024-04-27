@@ -8,10 +8,10 @@ plugins {
 }
 repositories {
     mavenLocal()
-    maven { url = 'https://maven.aliyun.com/repository/public' }
-    maven { url = 'https://maven.aliyun.com/repository/google' }
     mavenCentral()
     maven { url = 'https://jitpack.io' }
+    maven { url = 'https://maven.aliyun.com/repository/public' }
+    maven { url = 'https://maven.aliyun.com/repository/google' }
 }
 group = 'com.y.serialPortToolFX'
 version = '1.0.0'
@@ -23,6 +23,9 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
 
+    implementation 'org.bytedeco:javacpp:1.5.10'
+    implementation 'org.bytedeco:javacv-platform:1.5.10'
+    implementation 'org.bytedeco:javacv:1.5.10'
 
     // implementation 'net.java.dev.jna:jna-platform:5.14.0'
     implementation 'com.fazecast:jSerialComm:2.11.0'

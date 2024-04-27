@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
@@ -13,9 +14,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane fx:id="root" prefHeight="579.0" prefWidth="741.0" stylesheets="@../css/serialport.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.y.serialPortToolFX.controller.Content">
+<AnchorPane fx:id="root" prefHeight="579.0" prefWidth="741.0" xmlns="http://javafx.com/javafx/22"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.y.serialPortToolFX.controller.Content">
    <children>
-      <AnchorPane layoutX="306.0" layoutY="164.0" prefHeight="34.0" prefWidth="717.0" styleClass="top" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="306.0" layoutY="164.0" prefHeight="34.0" prefWidth="717.0" styleClass="top"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label layoutX="50.0" layoutY="1.0" prefHeight="28.0" prefWidth="123.0" text="SerialPortToolFX" AnchorPane.bottomAnchor="3.0" AnchorPane.topAnchor="3.0" />
             <Button layoutX="584.0" mnemonicParsing="false" onAction="#min" prefHeight="34.0" prefWidth="67.0" styleClass="min" text="—" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="67.0" AnchorPane.topAnchor="0.0" />
@@ -111,4 +114,8 @@
       <TextArea fx:id="send" layoutX="6.0" layoutY="407.0" prefHeight="84.0" prefWidth="500.0" />
       <Circle fx:id="analogLight" fill="#ff1f1f" layoutX="643.0" layoutY="472.0" radius="6.0" stroke="BLACK" strokeType="INSIDE" />
    </children>
+   <stylesheets>
+      <URL value="@../fonts/fonts.css" />
+      <URL value="@../css/serialport.css" />
+   </stylesheets>
 </AnchorPane>
