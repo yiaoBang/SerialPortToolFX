@@ -171,7 +171,7 @@ public class Content {
 
     @FXML
     void nextTheme() {
-        Application.setUserAgentStylesheet(Theme.getNext().css);
+        Application.setUserAgentStylesheet(Theme.next());
     }
 
     @FXML
