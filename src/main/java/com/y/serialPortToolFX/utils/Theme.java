@@ -3,7 +3,7 @@ package com.y.serialPortToolFX.utils;
 public enum Theme {
     CUPERTINO_DARK("cupertino-dark"),
     CUPERTINO_LIGHT("cupertino-light"),
-//    DRACULA("dracula"),
+    //    DRACULA("dracula"),
 //    NORD_DARK("nord-dark"),
 //    NORD_LIGHT("nord-light"),
     PRIMER_DARK("primer-dark"),
@@ -15,7 +15,9 @@ public enum Theme {
         this.css = "/assets/theme/" + css + ".css";
     }
 
+    private static final int valuesSize = values().length;
+
     public static Theme getNext() {
-        return Theme.values()[index++ % 4];
+        return Theme.values()[index++ % valuesSize];
     }
 }
