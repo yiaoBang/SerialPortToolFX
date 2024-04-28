@@ -6,9 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.Getter;
-
 import java.util.concurrent.atomic.AtomicReference;
-
 import static com.y.serialPortToolFX.AppLauncher.JAVAFX_BUILDER_FACTORY;
 
 @Getter
@@ -20,7 +18,6 @@ public class FXStage {
         Stage = stage;
         this.content = content;
     }
-
     public static FXStage create() {
         AtomicReference<Double> offsetX = new AtomicReference<>((double) 0);
         AtomicReference<Double> offsetY = new AtomicReference<>((double) 0);

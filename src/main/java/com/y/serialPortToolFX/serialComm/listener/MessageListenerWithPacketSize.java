@@ -6,6 +6,7 @@ import com.fazecast.jSerialComm.SerialPortPacketListener;
 import com.y.serialPortToolFX.serialComm.SerialComm;
 
 public class MessageListenerWithPacketSize implements SerialPortPacketListener {
+
     private final SerialComm serialComm;
     public MessageListenerWithPacketSize(SerialComm serialComm) {
         this.serialComm = serialComm;

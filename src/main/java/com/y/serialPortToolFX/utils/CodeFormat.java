@@ -3,9 +3,7 @@ package com.y.serialPortToolFX.utils;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.text.StringEscapeUtils;
-
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 
 public class CodeFormat {
     private CodeFormat() {

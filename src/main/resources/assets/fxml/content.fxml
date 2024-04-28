@@ -7,6 +7,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
@@ -14,11 +16,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 
-<AnchorPane fx:id="root" prefHeight="579.0" prefWidth="741.0" xmlns="http://javafx.com/javafx/22"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.y.serialPortToolFX.controller.Content">
+<AnchorPane fx:id="root" prefHeight="579.0" prefWidth="741.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.y.serialPortToolFX.controller.Content">
    <children>
-      <AnchorPane layoutX="306.0" layoutY="164.0" prefHeight="34.0" prefWidth="717.0" styleClass="top"
-                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="306.0" layoutY="164.0" prefHeight="34.0" prefWidth="717.0" styleClass="top" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label layoutX="50.0" layoutY="1.0" prefHeight="28.0" prefWidth="123.0" text="SerialPortToolFX" AnchorPane.bottomAnchor="3.0" AnchorPane.topAnchor="3.0" />
             <Button layoutX="584.0" mnemonicParsing="false" onAction="#min" prefHeight="34.0" prefWidth="67.0" styleClass="min" text="—" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="67.0" AnchorPane.topAnchor="0.0" />
@@ -28,6 +28,11 @@
                   <Region prefHeight="200.0" prefWidth="200.0" />
                </children>
             </StackPane>
+            <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="567.0" layoutY="2.0" onMouseReleased="#nextTheme" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="144.0">
+               <image>
+                  <Image url="@../images/theme.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
       <HBox layoutX="39.0" layoutY="572.0" prefHeight="34.0" prefWidth="662.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

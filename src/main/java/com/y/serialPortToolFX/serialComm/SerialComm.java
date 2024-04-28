@@ -21,15 +21,16 @@ public final class SerialComm implements AutoCloseable {
     @Setter
     private volatile long waitTime = 1000;
     private DataWriteFile dataWriteFile;
-    @Setter
     /**
      * 发送保存(写入本地文件)
      */
-    private volatile boolean sendSave;
     @Setter
+    private volatile boolean sendSave;
+
     /**
      * 接收保存(写入本地文件)
      */
+    @Setter
     private volatile boolean receiveSave;
     @Setter
     private volatile boolean receiveShow = false;

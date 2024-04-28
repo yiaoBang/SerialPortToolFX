@@ -7,12 +7,12 @@
 }
 
 #root {
-    -fx-background-color: White;
+    /*-fx-background-color: White;*/
     -fx-background-radius: 12 12 0 0;
 }
 
 .top {
-    -fx-background-color: #e5e4e4;
+    /*-fx-background-color: #e5e4e4;*/
     -fx-background-radius: 12 12 0 0;
 }
 
@@ -55,7 +55,7 @@
 }
 
 #sendNumber, #receiveNumber {
-    -fx-background-color: #e7e7e7;
+    /*-fx-background-color: #e7e7e7;*/
     -fx-font-size: 22;
     -fx-pref-width: 345;
     -fx-pref-height: 34;
@@ -66,9 +66,9 @@
     -fx-pref-height: 27;
 }
 #receive{
-    -fx-background-color: black;
+    /*-fx-background-color: black;*/
     -fx-font-size: 16;
-    -fx-text-fill: rgb(0, 255, 0);
+    /*-fx-text-fill: rgb(0, 255, 0);*/
 }
 #send{
     -fx-font-size: 16;

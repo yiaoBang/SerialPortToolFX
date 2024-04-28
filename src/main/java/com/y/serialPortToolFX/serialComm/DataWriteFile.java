@@ -19,20 +19,14 @@ import java.nio.file.StandardOpenOption;
  */
 public class DataWriteFile {
     private static final File dataFile = new File(AppLauncher.ROOT_FILE_PATH, "logs");
-
     static {
         if (!dataFile.exists()) {
             dataFile.mkdirs();
         }
     }
-
-    private DataWriteFile() {
-
-    }
-
     private static final OpenOption[] options = {StandardOpenOption.CREATE, StandardOpenOption.APPEND};
-    private Path readFile;
-    private Path writeFile;
+    private final Path readFile;
+    private final Path writeFile;
 
     public DataWriteFile(String serialPortName) {
         File read = new File(dataFile, serialPortName + "-" + TimeUtils.getFileName() + ".read");

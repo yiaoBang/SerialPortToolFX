@@ -6,20 +6,23 @@ import com.y.serialPortToolFX.serialComm.SerialComm;
 import com.y.serialPortToolFX.serialComm.SerialPortMonitor;
 import com.y.serialPortToolFX.utils.CodeFormat;
 import com.y.serialPortToolFX.utils.FXStage;
+import com.y.serialPortToolFX.utils.Theme;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 import java.io.File;
+
 import static com.y.serialPortToolFX.AppLauncher.FILE_CHOOSER;
 
 public class Content {
@@ -27,6 +30,8 @@ public class Content {
     private final Timeline circularSending = new Timeline();
     private volatile long waitTime = 1000;
     private volatile byte[] bytes;
+    @FXML
+    private ImageView theme;
     @FXML
     private AnchorPane root;
     @FXML
@@ -84,18 +89,18 @@ public class Content {
     private Circle analogLight;
 
     @FXML
-    void min(ActionEvent event) {
+    void min() {
         ((Stage) root.getScene().getWindow()).setIconified(true);
     }
 
     @FXML
-    void close(ActionEvent event) {
+    void close() {
         ((Stage) root.getScene().getWindow()).close();
         serialComm.close();
     }
 
     @FXML
-    void analogReply(ActionEvent event) {
+    void analogReply() {
         File file = FILE_CHOOSER.showOpenDialog(root.getScene().getWindow());
         if (file != null) {
             MockResponses mockResponses = MockResponses.parseJson(file);
@@ -120,18 +125,18 @@ public class Content {
     }
 
     @FXML
-    void cleanReceive(ActionEvent event) {
+    void cleanReceive() {
         serialComm.getBuffer().close();
         receive.clear();
     }
 
     @FXML
-    void cleanSend(ActionEvent event) {
+    void cleanSend() {
         send.clear();
     }
 
     @FXML
-    void createStage(ActionEvent event) {
+    void createStage() {
         Stage window = (Stage) root.getScene().getWindow();
         FXStage fxStage = FXStage.create();
         fxStage.getContent().initSerialPort(serialComm.getBaudRate(), serialComm.getDataBits(), serialComm.getStopSting(), serialComm.getParitySting(), serialComm.getFlowControlSting());
@@ -141,12 +146,12 @@ public class Content {
     }
 
     @FXML
-    void sendData(ActionEvent event) {
+    void sendData() {
         serialComm.write(bytes);
     }
 
     @FXML
-    void serialPortSwitch(ActionEvent event) {
+    void serialPortSwitch() {
         if (serialComm.getSerialPortState().get()) {
             serialComm.close();
         } else {
@@ -155,23 +160,30 @@ public class Content {
     }
 
     @FXML
-    void cleanReceiveNumber(MouseEvent event) {
+    void cleanReceiveNumber() {
         serialComm.clearReceive();
     }
 
     @FXML
-    void cleanSendNumber(MouseEvent event) {
+    void cleanSendNumber() {
         serialComm.clearSend();
     }
 
     @FXML
+    void nextTheme() {
+        Application.setUserAgentStylesheet(Theme.getNext().css);
+    }
+
+    @FXML
     void initialize() {
+        //主题
+        Tooltip.install(theme, new Tooltip("切换主题"));
         //无限循环发送
         circularSending.setCycleCount(Timeline.INDEFINITE);
         //接收保存的开关
-        receiveSave.selectedProperty().addListener((observable, oldValue, newValue) -> serialComm.setReceiveSave(newValue));
+        receiveSave.selectedProperty().addListener((_, _, newValue) -> serialComm.setReceiveSave(newValue));
         //发送保存的开关
-        sendSave.selectedProperty().addListener((observable, oldValue, newValue) -> serialComm.setSendSave(newValue));
+        sendSave.selectedProperty().addListener((_, _, newValue) -> serialComm.setSendSave(newValue));
         //计数绑定
         sendNumber.textProperty().bind(serialComm.getSEND_LONG_PROPERTY().asString());
         receiveNumber.textProperty().bind(serialComm.getRECEIVE_LONG_PROPERTY().asString());
@@ -191,12 +203,12 @@ public class Content {
 
 
         //串口参数更新
-        serialPortNamePicker.valueProperty().addListener((observable, oldValue, newValue) -> serialComm.setSerialPortName(newValue));
-        baudRatePicker.valueProperty().addListener((observable, oldValue, newValue) -> serialComm.setBaudRate(newValue));
-        dataBitsPicker.valueProperty().addListener((observable, oldValue, newValue) -> serialComm.setDataBits(newValue));
-        stopBitsPicker.valueProperty().addListener((observable, oldValue, newValue) -> serialComm.setStopBits(newValue));
-        parityPicker.valueProperty().addListener((observable, oldValue, newValue) -> serialComm.setParity(newValue));
-        flowControlPicker.valueProperty().addListener((observable, oldValue, newValue) -> serialComm.setFlowControl(newValue));
+        serialPortNamePicker.valueProperty().addListener((_, _, newValue) -> serialComm.setSerialPortName(newValue));
+        baudRatePicker.valueProperty().addListener((_, _, newValue) -> serialComm.setBaudRate(newValue));
+        dataBitsPicker.valueProperty().addListener((_, _, newValue) -> serialComm.setDataBits(newValue));
+        stopBitsPicker.valueProperty().addListener((_, _, newValue) -> serialComm.setStopBits(newValue));
+        parityPicker.valueProperty().addListener((_, _, newValue) -> serialComm.setParity(newValue));
+        flowControlPicker.valueProperty().addListener((_, _, newValue) -> serialComm.setFlowControl(newValue));
 
 
         //绑定列表,动态更新
@@ -212,7 +224,7 @@ public class Content {
         serialPortNamePicker.setValue(serialPortNamePicker.getItems().isEmpty() ? "" : serialPortNamePicker.getItems().getFirst());
 
         //延迟时间
-        time.textProperty().addListener((observable, oldValue, newValue) -> {
+        time.textProperty().addListener((_, oldValue, newValue) -> {
             try {
                 waitTime = Integer.parseInt(newValue);
                 if (waitTime < 1) {
@@ -224,11 +236,11 @@ public class Content {
             }
         });
         //定时发送开关
-        timedDispatch.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        timedDispatch.selectedProperty().addListener((_, _, newValue) -> {
             if (newValue) {
                 //清理帧
                 circularSending.getKeyFrames().clear();
-                circularSending.getKeyFrames().add(new KeyFrame(Duration.millis(waitTime), s -> {
+                circularSending.getKeyFrames().add(new KeyFrame(Duration.millis(waitTime), _ -> {
                     if (serialComm.write(bytes) < 1) {
                         circularSending.stop();
                         timedDispatch.setSelected(false);
@@ -242,7 +254,7 @@ public class Content {
 
 
         //更新要发送的数据
-        send.textProperty().addListener((observable, oldValue, newValue) -> {
+        send.textProperty().addListener((_, _, newValue) -> {
             if (!newValue.isEmpty()) {
                 bytes = hexSend.isSelected() ? CodeFormat.hex(newValue) : CodeFormat.utf8(newValue);
             } else {
@@ -250,7 +262,7 @@ public class Content {
             }
         });
         //16进制发送
-        hexSend.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        hexSend.selectedProperty().addListener((_, _, newValue) -> {
             String text = send.getText();
             if (!text.isEmpty()) {
                 bytes = newValue ? CodeFormat.hex(text) : CodeFormat.utf8(text);
@@ -260,17 +272,17 @@ public class Content {
         });
 
         //是否显示
-        receiveShow.selectedProperty().addListener((observable, oldValue, newValue) -> serialComm.setReceiveShow(newValue));
+        receiveShow.selectedProperty().addListener((_, _, newValue) -> serialComm.setReceiveShow(newValue));
 
         //更新显示
-        serialComm.getRECEIVE_LONG_PROPERTY().addListener((observable, oldValue, newValue) -> {
+        serialComm.getRECEIVE_LONG_PROPERTY().addListener((_, _, _) -> {
             if (receiveShow.isSelected()) {
                 receive.setText(hexReceive.isSelected() ? CodeFormat.hex(serialComm.getData()) : CodeFormat.utf8(serialComm.getData()));
                 receive.setScrollTop(Double.MAX_VALUE);
             }
         });
         //16进制接收显示
-        hexReceive.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        hexReceive.selectedProperty().addListener((_, _, newValue) -> {
             byte[] data = serialComm.getData();
             receive.setText(newValue ? CodeFormat.hex(data) : CodeFormat.utf8(data));
             //滚动条自动滚动
@@ -278,13 +290,14 @@ public class Content {
         });
 
         //检查串口是否还在
-        SerialPortMonitor.serialPorts.addListener((observable, oldValue, newValue) -> {
+        SerialPortMonitor.serialPorts.addListener((_, _, newValue) -> {
             if (newValue != null && !newValue.contains(serialComm.getSerialPortName())) {
                 serialComm.close();
                 serialPortNamePicker.setValue("");
             }
         });
     }
+
     public void initSerialPort(int baudRate, int dateBits, String stop, String parity, String flow) {
         baudRatePicker.setValue(baudRate);
         dataBitsPicker.setValue(dateBits);

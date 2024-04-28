@@ -6,6 +6,7 @@ plugins {
     id('org.beryx.jlink') version '3.0.1'
     id('com.github.johnrengelman.shadow') version '8.1.1'
 }
+
 repositories {
     mavenLocal()
     mavenCentral()
