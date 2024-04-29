@@ -4,7 +4,8 @@ public enum Theme {
 
     CUPERTINO_LIGHT("cupertino-light"), CUPERTINO_DARK("cupertino-dark"),
     //    DRACULA("dracula"),NORD_DARK("nord-dark"),NORD_LIGHT("nord-light"),
-    PRIMER_LIGHT("primer-light"), PRIMER_DARK("primer-dark");
+    //PRIMER_LIGHT("primer-light"), PRIMER_DARK("primer-dark")
+    ;
     public static int index = 0;
     public final String css;
 
