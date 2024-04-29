@@ -43,19 +43,20 @@
 /* 设置下拉列表中选项的文本居中对齐 */
 .combo-box .list-cell {
     -fx-alignment: center;
+
 }
 /* 设置选择按钮中的文本居中对齐 */
 .combo-box .list-cell:filled:selected .text {
     -fx-alignment: center;
 }
 .title {
-    -fx-background-color: #FF00008B;
+    -fx-background-color: rgba(255, 0, 0, 0.4);
     -fx-pref-width: 55;
     -fx-pref-height: 34;
 }
 
 #sendNumber, #receiveNumber {
-    /*-fx-background-color: #e7e7e7;*/
+    -fx-background-color: rgba(46, 148, 251, 0.4);
     -fx-font-size: 22;
     -fx-pref-width: 345;
     -fx-pref-height: 34;
