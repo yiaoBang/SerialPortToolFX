@@ -6,7 +6,11 @@
 
 ## 软件界面
 
+### 亮色主题
+
 ![light](light.png)
+
+### 暗色主题
 
 ![daek](dark.png)
 
