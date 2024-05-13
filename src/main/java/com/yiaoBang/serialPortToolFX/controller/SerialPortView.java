@@ -164,9 +164,11 @@ public class SerialPortView {
     void createSerialPortStage() {
         Stage window = (Stage) root.getScene().getWindow();
         SerialPortStage serialPortStage = SerialPortStage.create();
-        serialPortStage.getSerialPortView().initTheme(this.theme);
-        serialPortStage.getSerialPortView().initSerialPort(serialComm.getBaudRate(), serialComm.getDataBits(), serialComm.getStopSting(),
-                serialComm.getParitySting(), serialComm.getFlowControlSting());
+        serialPortStage.getSerialPortView()
+                .initTheme(this.theme)
+                .initSerialPort(serialComm.getBaudRate(), serialComm.getDataBits(), serialComm.getStopSting(),
+                        serialComm.getParitySting(), serialComm.getFlowControlSting());
+
         serialPortStage.getStage().setX(window.getX() + 100);
         serialPortStage.getStage().setY(window.getY() + 100);
         serialPortStage.getStage().show();
