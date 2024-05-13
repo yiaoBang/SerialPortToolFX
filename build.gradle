@@ -1,28 +1,30 @@
 plugins {
     id 'java'
     id('application')
-    id('java-library')
     id('org.openjfx.javafxplugin') version '0.1.0'
     id('org.beryx.jlink') version '3.0.1'
-    id('com.github.johnrengelman.shadow') version '8.1.1'
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
     maven { url = 'https://jitpack.io' }
-    maven { url = 'https://maven.aliyun.com/repository/public' }
-    maven { url = 'https://maven.aliyun.com/repository/google' }
 }
-group = 'com.y.serialPortToolFX'
+
+group = 'com.yiaoBang.serialPortToolFX'
 version = '1.0.1'
+
 javafx {
     version = '22.0.1'
     modules = ['javafx.controls', 'javafx.fxml']
 }
+
+
 dependencies {
     implementation 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+    implementation 'io.github.mkpaz:atlantafx-base:2.0.1'
 
 
     implementation 'com.fazecast:jSerialComm:2.11.0'
@@ -39,17 +41,17 @@ test {
 }
 application {
     applicationName = 'SerialPortToolFX'
-    mainClass = 'com.y.serialPortToolFX.AppLauncher'
+    mainClass = 'com.yiaoBang.serialPortToolFX.AppLauncher'
     mainModule = 'SerialPortToolFX'
-    applicationDefaultJvmArgs = ['-Dfile.encoding=UTF-8']
+    applicationDefaultJvmArgs = ['-Dfile.encoding=UTF-8'
+                               //  , '-XX:+UseZGC'
+    ]
 }
+
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
-shadowJar {
-    archiveFileName = 'SerialPortToolFX.jar'
-}
 jlink {
     options.set(List.of('--strip-debug', '--compress', 'zip-9', '--no-header-files', '--no-man-pages'))
     launcher {
@@ -57,6 +59,7 @@ jlink {
         imageName.set(application.applicationName)
     }
     imageZip.set(project.file('${project.getLayout().getBuildDirectory().get()}/image-zip/JavaFXSample.zip'))
+
     jpackage {
         outputDir = 'jpackage'
         imageName = application.applicationName + "-" + version

@@ -1,4 +1,4 @@
-package com.y.serialPortToolFX.utils;
+package com.yiaoBang.serialPortToolFX.utils;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
@@ -28,11 +28,6 @@ public class CodeFormat {
             return null;
         }
     }
-
-    public static String utf8ToHex(String utf8) {
-        return hex(utf8(utf8));
-    }
-
     public static String hexToUtf8(String hex) {
         return utf8(hex(hex));
     }

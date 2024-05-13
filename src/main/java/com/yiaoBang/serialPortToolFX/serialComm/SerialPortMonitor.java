@@ -1,7 +1,7 @@
-package com.y.serialPortToolFX.serialComm;
+package com.yiaoBang.serialPortToolFX.serialComm;
 
 import com.fazecast.jSerialComm.SerialPort;
-import com.y.serialPortToolFX.utils.FX;
+import com.yiaoBang.javafxTool.core.FX;
 import javafx.beans.property.SimpleStringProperty;
 
 import java.util.StringJoiner;

@@ -1,9 +1,9 @@
-package com.y.serialPortToolFX.serialComm.listener;
+package com.yiaoBang.serialPortToolFX.serialComm.listener;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortMessageListenerWithExceptions;
-import com.y.serialPortToolFX.serialComm.SerialComm;
+import com.yiaoBang.serialPortToolFX.serialComm.SerialComm;
 
 
 public class MessageListenerWithDelimiter implements SerialPortMessageListenerWithExceptions {

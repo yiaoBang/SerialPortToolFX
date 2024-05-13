@@ -1,8 +1,8 @@
-package com.y.serialPortToolFX;
+package com.yiaoBang.serialPortToolFX;
 
-import com.y.serialPortToolFX.serialComm.SerialPortMonitor;
-import com.y.serialPortToolFX.utils.FXStage;
-import com.y.serialPortToolFX.utils.Theme;
+import com.yiaoBang.javafxTool.theme.Theme;
+import com.yiaoBang.serialPortToolFX.serialComm.SerialPortMonitor;
+import com.yiaoBang.serialPortToolFX.utils.SerialPortStage;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.JavaFXBuilderFactory;
@@ -31,7 +31,7 @@ public class AppLauncher extends Application {
     public void init() throws Exception {
         super.init();
         //加载主题
-        Application.setUserAgentStylesheet(Theme.next());
+        Application.setUserAgentStylesheet(Theme.CUPERTINO_LIGHT.getCss());
         JAVAFX_BUILDER_FACTORY = new JavaFXBuilderFactory();
         //初始化文件选择器
         FILE_CHOOSER.setTitle("选择json文件");
@@ -45,7 +45,7 @@ public class AppLauncher extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        FXStage.create().getStage().show();
+        SerialPortStage.create().getStage().show();
     }
 
     @Override

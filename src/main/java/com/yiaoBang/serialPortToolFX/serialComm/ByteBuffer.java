@@ -1,4 +1,4 @@
-package com.y.serialPortToolFX.serialComm;
+package com.yiaoBang.serialPortToolFX.serialComm;
 
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;

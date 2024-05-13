@@ -1,8 +1,8 @@
-package com.y.serialPortToolFX.serialComm;
+package com.yiaoBang.serialPortToolFX.serialComm;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.y.serialPortToolFX.utils.CodeFormat;
+import com.yiaoBang.serialPortToolFX.utils.CodeFormat;
 import lombok.Getter;
 import lombok.Setter;
 

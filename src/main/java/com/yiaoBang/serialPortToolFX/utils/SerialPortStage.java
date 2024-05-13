@@ -1,36 +1,40 @@
-package com.y.serialPortToolFX.utils;
+package com.yiaoBang.serialPortToolFX.utils;
 
-import com.y.serialPortToolFX.controller.Content;
+import com.yiaoBang.serialPortToolFX.controller.SerialPortView;
+import com.yiaoBang.javafxTool.core.FX;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.Getter;
+
 import java.util.concurrent.atomic.AtomicReference;
-import static com.y.serialPortToolFX.AppLauncher.JAVAFX_BUILDER_FACTORY;
+
+import static com.yiaoBang.serialPortToolFX.AppLauncher.JAVAFX_BUILDER_FACTORY;
 
 @Getter
-public class FXStage {
+public class SerialPortStage {
     private final Stage Stage;
-    private final Content content;
+    private final SerialPortView serialPortView;
 
-    public FXStage(javafx.stage.Stage stage, Content content) {
+    public SerialPortStage(Stage stage, SerialPortView serialPortView) {
         Stage = stage;
-        this.content = content;
+        this.serialPortView = serialPortView;
     }
-    public static FXStage create() {
+
+    public static SerialPortStage create() {
         AtomicReference<Double> offsetX = new AtomicReference<>((double) 0);
         AtomicReference<Double> offsetY = new AtomicReference<>((double) 0);
         Stage stage = new Stage(StageStyle.TRANSPARENT);
 
-        FXMLLoader loader = FX.FXMLLoader("content");
+        FXMLLoader loader = FX.fxmlLoader("serialPortView.fxml");
         loader.setBuilderFactory(JAVAFX_BUILDER_FACTORY);
-        //Content content = new Content();
-        //loader.setController(content);
-        Scene scene = FX.scene(loader);
+        Scene scene = FX.loadScene(loader);
+        scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.getIcons().add(FX.image("ico.png"));
-        Content content = loader.getController();
+        SerialPortView serialPortView1 = loader.getController();
 
 
         //设置拖动界面
@@ -42,6 +46,6 @@ public class FXStage {
             stage.setX(event.getScreenX() - offsetX.get());
             stage.setY(event.getScreenY() - offsetY.get());
         });
-        return new FXStage(stage,content);
+        return new SerialPortStage(stage, serialPortView1);
     }
 }
