@@ -4,7 +4,6 @@ package com.yiaoBang.serialPortToolFX.data;
 import com.yiaoBang.serialPortToolFX.AppLauncher;
 import com.yiaoBang.serialPortToolFX.utils.CodeFormat;
 import com.yiaoBang.serialPortToolFX.utils.TimeUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

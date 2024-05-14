@@ -1,10 +1,10 @@
 package com.yiaoBang.serialPortToolFX.data;
 
 public final class ByteBuffer {
-    private final CircularQueue CircularQueue;
+    private final CircularArray CircularQueue;
 
     public ByteBuffer(int maxSize) {
-        CircularQueue = new CircularQueue(maxSize);
+        CircularQueue = new CircularArray(maxSize);
     }
 
     public void add(byte[] bytes) {
@@ -12,7 +12,7 @@ public final class ByteBuffer {
     }
 
     public byte[] getBuffer() {
-        return CircularQueue.getBytes();
+        return CircularQueue.getElements();
     }
 
     public void close() {
