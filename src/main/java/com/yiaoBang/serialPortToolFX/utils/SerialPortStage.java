@@ -1,6 +1,6 @@
 package com.yiaoBang.serialPortToolFX.utils;
 
-import com.yiaoBang.serialPortToolFX.controller.SerialPortView;
+import com.yiaoBang.serialPortToolFX.view.SerialPortView;
 import com.yiaoBang.javafxTool.core.FX;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

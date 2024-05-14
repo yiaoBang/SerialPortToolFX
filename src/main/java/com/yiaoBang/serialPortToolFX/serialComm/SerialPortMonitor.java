@@ -3,9 +3,14 @@ package com.yiaoBang.serialPortToolFX.serialComm;
 import com.fazecast.jSerialComm.SerialPort;
 import com.yiaoBang.javafxTool.core.FX;
 import javafx.beans.property.SimpleStringProperty;
-
 import java.util.StringJoiner;
 
+/**
+ * 串口监视器
+ *
+ * @author Y
+ * @date 2024/05/14
+ */
 public class SerialPortMonitor {
     public static volatile SerialPort[] commPorts = SerialPort.getCommPorts();
     public static final SimpleStringProperty serialPorts = new SimpleStringProperty(serialPortsToString());

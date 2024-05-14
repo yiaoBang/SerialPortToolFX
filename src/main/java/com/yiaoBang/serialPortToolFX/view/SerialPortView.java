@@ -1,7 +1,7 @@
-package com.yiaoBang.serialPortToolFX.controller;
+package com.yiaoBang.serialPortToolFX.view;
 
 
-import com.yiaoBang.serialPortToolFX.serialComm.MockResponses;
+import com.yiaoBang.serialPortToolFX.data.MockResponses;
 import com.yiaoBang.serialPortToolFX.serialComm.SerialComm;
 import com.yiaoBang.serialPortToolFX.serialComm.SerialPortMonitor;
 import com.yiaoBang.serialPortToolFX.utils.CodeFormat;

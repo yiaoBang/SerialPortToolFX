@@ -2,6 +2,9 @@ package com.yiaoBang.serialPortToolFX.serialComm;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
+import com.yiaoBang.serialPortToolFX.data.ByteBuffer;
+import com.yiaoBang.serialPortToolFX.data.DataWriteFile;
+import com.yiaoBang.serialPortToolFX.data.MockResponses;
 import com.yiaoBang.serialPortToolFX.serialComm.listener.MessageListenerWithDelimiter;
 import com.yiaoBang.serialPortToolFX.serialComm.listener.MessageListenerWithPacketSize;
 import com.yiaoBang.javafxTool.core.FX;
@@ -10,10 +13,16 @@ import javafx.beans.property.SimpleLongProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 串行通信
+ *
+ * @author Y
+ * @date 2024/05/14
+ */
 @Getter
 public final class SerialComm implements AutoCloseable {
-    //最多显示51200个接收到的字节
-    private static final int maxShowByteNumber = 12800;
+    //最多显示4096个接收到的字节(再多的话滚动条会出问题)
+    private static final int maxShowByteNumber = 4096;
     private final ByteBuffer buffer = new ByteBuffer(maxShowByteNumber);
     //模拟回复
     @Setter
@@ -66,6 +75,11 @@ public final class SerialComm implements AutoCloseable {
         this.listener = new MessageListenerWithDelimiter(this);
     }
 
+    /**
+     * 更新侦听器
+     *
+     * @param messageDelimiter 消息分隔符
+     */
     public void updateListener(byte[] messageDelimiter) {
         if (messageDelimiter != null) {
             this.messageDelimiter = messageDelimiter;
@@ -75,6 +89,11 @@ public final class SerialComm implements AutoCloseable {
         }
     }
 
+    /**
+     * 更新侦听器
+     *
+     * @param packSize 包大小
+     */
     public void updateListener(int packSize) {
         if (messageDelimiter != null) {
             this.packSize = packSize;
@@ -84,6 +103,9 @@ public final class SerialComm implements AutoCloseable {
         }
     }
 
+    /**
+     * 查找串口
+     */
     public void findSerialPort() {
         close();
         for (SerialPort serial : SerialPort.getCommPorts()) {
@@ -95,6 +117,9 @@ public final class SerialComm implements AutoCloseable {
         serialPort = null;
     }
 
+    /**
+     * 打开串口
+     */
     public void openSerialPort() {
         findSerialPort();
         if (serialPort == null) {
@@ -109,6 +134,12 @@ public final class SerialComm implements AutoCloseable {
         FX.run(() -> serialPortState.set(b));
     }
 
+    /**
+     * 写
+     *
+     * @param bytes 字节
+     * @return int
+     */
     public int write(byte[] bytes) {
         if (bytes != null && serialPort != null && serialPort.isOpen()) {
             int sendNumber = serialPort.writeBytes(bytes, bytes.length);
@@ -124,6 +155,11 @@ public final class SerialComm implements AutoCloseable {
         return 0;
     }
 
+    /**
+     * 听
+     *
+     * @param bytes 字节
+     */
     public void listen(byte[] bytes) {
         //模拟回复
         if (mockResponses != null) {
@@ -146,33 +182,64 @@ public final class SerialComm implements AutoCloseable {
             Thread.startVirtualThread(() -> dataWriteFile.serialCommReceive(bytes));
     }
 
+    /**
+     * 获取数据
+     *
+     * @return {@code byte[] }
+     */
     public byte[] getData() {
         return buffer.getBuffer();
     }
 
+    /**
+     * 清除发送
+     */
     public void clearSend() {
         FX.run(() -> SEND_LONG_PROPERTY.set(0));
     }
 
+    /**
+     * 清除接收
+     */
     public void clearReceive() {
         FX.run(() -> RECEIVE_LONG_PROPERTY.set(0));
     }
 
+    /**
+     * 设置串口名称
+     *
+     * @param serialPortName 串口名称
+     */
     public void setSerialPortName(String serialPortName) {
         this.serialPortName = serialPortName;
         openSerialPort();
     }
 
+    /**
+     * 设置波特率
+     *
+     * @param baudRate 波特率
+     */
     public void setBaudRate(int baudRate) {
         this.baudRate = baudRate;
         openSerialPort();
     }
 
+    /**
+     * 设置数据位
+     *
+     * @param dataBits 数据位
+     */
     public void setDataBits(int dataBits) {
         this.dataBits = dataBits;
         openSerialPort();
     }
 
+    /**
+     * 设置停止位
+     *
+     * @param stopBits 停止位
+     */
     public void setStopBits(String stopBits) {
         this.stopSting = stopBits;
         this.stopBits = switch (stopBits) {
@@ -183,6 +250,11 @@ public final class SerialComm implements AutoCloseable {
         openSerialPort();
     }
 
+    /**
+     * 设置奇偶校验
+     *
+     * @param parity 平价
+     */
     public void setParity(String parity) {
         this.paritySting = parity;
         this.parity = switch (parity) {
@@ -195,6 +267,11 @@ public final class SerialComm implements AutoCloseable {
         openSerialPort();
     }
 
+    /**
+     * 设置流量控制
+     *
+     * @param flowControl 流控制
+     */
     public void setFlowControl(String flowControl) {
         this.flowControlSting = flowControl;
         this.flowControl = switch (flowControl) {
@@ -206,6 +283,9 @@ public final class SerialComm implements AutoCloseable {
         openSerialPort();
     }
 
+    /**
+     * 关闭
+     */
     @Override
     public void close() {
         if (serialPort != null) {

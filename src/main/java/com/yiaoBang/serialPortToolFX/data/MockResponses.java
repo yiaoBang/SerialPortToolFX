@@ -1,11 +1,10 @@
-package com.yiaoBang.serialPortToolFX.serialComm;
+package com.yiaoBang.serialPortToolFX.data;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yiaoBang.serialPortToolFX.utils.CodeFormat;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;

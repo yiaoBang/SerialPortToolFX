@@ -1,4 +1,4 @@
-package com.yiaoBang.serialPortToolFX.serialComm;
+package com.yiaoBang.serialPortToolFX.data;
 
 
 import com.yiaoBang.serialPortToolFX.AppLauncher;
@@ -18,7 +18,7 @@ import java.nio.file.StandardOpenOption;
  * @date 2024/3/23 14:56
  */
 public class DataWriteFile {
-    private static final File dataFile = new File(AppLauncher.ROOT_FILE_PATH, "logs");
+    private static final File dataFile = new File(AppLauncher.ROOT_FILE_PATH, "serial_port_data");
     static {
         if (!dataFile.exists()) {
             dataFile.mkdirs();
