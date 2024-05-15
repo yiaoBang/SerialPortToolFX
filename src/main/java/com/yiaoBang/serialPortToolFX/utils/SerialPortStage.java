@@ -1,15 +1,13 @@
 package com.yiaoBang.serialPortToolFX.utils;
 
-import com.yiaoBang.serialPortToolFX.view.SerialPortView;
 import com.yiaoBang.javafxTool.core.FX;
+import com.yiaoBang.serialPortToolFX.view.SerialPortView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import lombok.Getter;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 import static com.yiaoBang.serialPortToolFX.AppLauncher.JAVAFX_BUILDER_FACTORY;
 
@@ -24,8 +22,6 @@ public class SerialPortStage {
     }
 
     public static SerialPortStage create() {
-        AtomicReference<Double> offsetX = new AtomicReference<>((double) 0);
-        AtomicReference<Double> offsetY = new AtomicReference<>((double) 0);
         Stage stage = new Stage(StageStyle.TRANSPARENT);
 
         FXMLLoader loader = FX.fxmlLoader("serialPortView.fxml");
@@ -36,16 +32,8 @@ public class SerialPortStage {
         stage.getIcons().add(FX.image("ico.png"));
         SerialPortView serialPortView1 = loader.getController();
 
+        FX.stageDrag(scene,stage);
 
-        //设置拖动界面
-        scene.setOnMousePressed(event -> {
-            offsetX.set(event.getSceneX());
-            offsetY.set(event.getSceneY());
-        });
-        scene.setOnMouseDragged(event -> {
-            stage.setX(event.getScreenX() - offsetX.get());
-            stage.setY(event.getScreenY() - offsetY.get());
-        });
         return new SerialPortStage(stage, serialPortView1);
     }
 }

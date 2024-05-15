@@ -6,7 +6,7 @@ package com.yiaoBang.serialPortToolFX.data;
  * @author Y
  * @date 2024/05/14
  */
-public class CircularArray{
+public class CircularArray {
     private final byte[] array;
     private int front; // 头部指针
     private int rear; // 尾部指针
@@ -15,7 +15,7 @@ public class CircularArray{
 
     public CircularArray(int capacity) {
         this.capacity = capacity;
-        this.array =  new byte[capacity];
+        this.array = new byte[capacity];
         this.front = 0;
         this.rear = -1;
         this.size = 0;
@@ -47,14 +47,16 @@ public class CircularArray{
         }
     }
 
-    public void clear() {
-        front = 0;
-        rear = -1;
-        size = 0;
+    public byte getElement(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+        int actualIndex = (front + index) % capacity;
+        return array[actualIndex];
     }
 
     public byte[] getElements() {
-        byte[] result =  new byte[size];
+        byte[] result = new byte[size];
         if (size == 0) {
             return result;
         }
@@ -64,10 +66,16 @@ public class CircularArray{
         } else {
             int frontSegmentLength = capacity - front;
             System.arraycopy(array, front, result, 0, frontSegmentLength);
-            System.arraycopy(array, 0, result, frontSegmentLength, rear + 1);
+            System.arraycopy(array, 0, result, frontSegmentLength, size - frontSegmentLength);
         }
 
         return result;
+    }
+
+    public void clear() {
+        front = 0;
+        rear = -1;
+        size = 0;
     }
 
     public int size() {

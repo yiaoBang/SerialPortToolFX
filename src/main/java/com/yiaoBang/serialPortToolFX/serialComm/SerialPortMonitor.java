@@ -15,7 +15,6 @@ public class SerialPortMonitor {
     public static volatile SerialPort[] commPorts = SerialPort.getCommPorts();
     public static final SimpleStringProperty serialPorts = new SimpleStringProperty(serialPortsToString());
     public static final Thread serialPortMonitorThread;
-
     static {
         serialPortMonitorThread = new Thread(() -> {
             while (true) {

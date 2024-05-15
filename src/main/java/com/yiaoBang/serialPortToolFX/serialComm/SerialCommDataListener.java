@@ -1,19 +1,19 @@
-package com.yiaoBang.serialPortToolFX.serialComm.listener;
+package com.yiaoBang.serialPortToolFX.serialComm;
 
 import com.fazecast.jSerialComm.SerialPort;
+import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
-import com.fazecast.jSerialComm.SerialPortPacketListener;
-import com.yiaoBang.serialPortToolFX.serialComm.SerialComm;
 
-public class MessageListenerWithPacketSize implements SerialPortPacketListener {
-
+/**
+ * 串行通信数据侦听器
+ *
+ * @author Y
+ * @date 2024/05/15
+ */
+public final class SerialCommDataListener implements SerialPortDataListener {
     private final SerialComm serialComm;
-    public MessageListenerWithPacketSize(SerialComm serialComm) {
+    public SerialCommDataListener(SerialComm serialComm) {
         this.serialComm = serialComm;
-    }
-    @Override
-    public int getPacketSize() {
-        return serialComm.getPackSize();
     }
     @Override
     public int getListeningEvents() {

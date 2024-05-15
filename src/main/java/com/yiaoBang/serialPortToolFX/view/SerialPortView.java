@@ -1,12 +1,12 @@
 package com.yiaoBang.serialPortToolFX.view;
 
 
-import com.yiaoBang.serialPortToolFX.data.MockResponses;
+import com.yiaoBang.javafxTool.mvvm.ViewFXML;
+import com.yiaoBang.javafxTool.theme.Theme;
 import com.yiaoBang.serialPortToolFX.serialComm.SerialComm;
 import com.yiaoBang.serialPortToolFX.serialComm.SerialPortMonitor;
 import com.yiaoBang.serialPortToolFX.utils.CodeFormat;
 import com.yiaoBang.serialPortToolFX.utils.SerialPortStage;
-import com.yiaoBang.javafxTool.theme.Theme;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
@@ -20,11 +20,16 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import static com.yiaoBang.serialPortToolFX.AppLauncher.FILE_CHOOSER;
 
-public class SerialPortView {
-    private final SerialComm serialComm = new SerialComm();
+
+public class SerialPortView extends ViewFXML<SerialComm> {
+    /**
+     * 循环发送
+     */
     private final Timeline circularSending = new Timeline();
     private volatile long waitTime = 1000;
     private volatile byte[] bytes;
@@ -94,6 +99,16 @@ public class SerialPortView {
     private Circle analogLight;
 
     /**
+     * 创建视图模型
+     *
+     * @return {@code SerialComm }
+     */
+    @Override
+    protected SerialComm createViewModel() {
+        return new SerialComm();
+    }
+
+    /**
      * 最小化窗口
      */
     @FXML
@@ -107,7 +122,7 @@ public class SerialPortView {
     @FXML
     void close() {
         ((Stage) root.getScene().getWindow()).close();
-        serialComm.close();
+        viewModel.close();
     }
 
     /**
@@ -118,26 +133,8 @@ public class SerialPortView {
     @FXML
     void analogReply() {
         File file = FILE_CHOOSER.showOpenDialog(root.getScene().getWindow());
-        if (file != null) {
-            MockResponses mockResponses = MockResponses.parseJson(file);
-            if (mockResponses == null) {
-                analogLight.setFill(Color.RED);
-                serialComm.updateListener(new byte[0]);
-                serialComm.setMockResponses(null);
-            } else {
-                analogLight.setFill(Color.LIME);
-                if (mockResponses.getPackSize() > 0) {
-                    serialComm.updateListener(mockResponses.getPackSize());
-                } else {
-                    serialComm.updateListener(mockResponses.getDelimiter());
-                }
-                serialComm.setMockResponses(mockResponses);
-            }
-        } else {
-            serialComm.setMockResponses(null);
-            serialComm.updateListener(new byte[0]);
-            analogLight.setFill(Color.RED);
-        }
+        boolean mockResponses = viewModel.createMockResponses(file);
+        analogLight.setFill(mockResponses ? Color.LIME : Color.RED);
     }
 
     /**
@@ -145,7 +142,7 @@ public class SerialPortView {
      */
     @FXML
     void cleanReceive() {
-        serialComm.getBuffer().close();
+        viewModel.getBuffer().close();
         receive.clear();
     }
 
@@ -166,8 +163,8 @@ public class SerialPortView {
         SerialPortStage serialPortStage = SerialPortStage.create();
         serialPortStage.getSerialPortView()
                 .initTheme(this.theme)
-                .initSerialPort(serialComm.getBaudRate(), serialComm.getDataBits(), serialComm.getStopSting(),
-                        serialComm.getParitySting(), serialComm.getFlowControlSting());
+                .initSerialPort(viewModel.getBaudRate(), viewModel.getDataBits(), viewModel.getStopSting(),
+                        viewModel.getParitySting(), viewModel.getFlowControlSting());
 
         serialPortStage.getStage().setX(window.getX() + 100);
         serialPortStage.getStage().setY(window.getY() + 100);
@@ -179,7 +176,7 @@ public class SerialPortView {
      */
     @FXML
     void sendData() {
-        serialComm.write(bytes);
+        viewModel.write(bytes);
     }
 
     /**
@@ -189,10 +186,10 @@ public class SerialPortView {
      */
     @FXML
     void serialPortSwitch() {
-        if (serialComm.getSerialPortState().get()) {
-            serialComm.close();
+        if (viewModel.getSerialPortState().get()) {
+            viewModel.close();
         } else {
-            serialComm.openSerialPort();
+            viewModel.openSerialPort();
         }
     }
 
@@ -201,7 +198,7 @@ public class SerialPortView {
      */
     @FXML
     void cleanReceiveNumber() {
-        serialComm.clearReceive();
+        viewModel.clearReceive();
     }
 
     /**
@@ -209,7 +206,7 @@ public class SerialPortView {
      */
     @FXML
     void cleanSendNumber() {
-        serialComm.clearSend();
+        viewModel.clearSend();
     }
 
     /**
@@ -222,39 +219,40 @@ public class SerialPortView {
         root.getScene().setUserAgentStylesheet(Theme.rotationTheme(theme));
     }
 
-    @FXML
-    void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        super.initialize(location, resources);
         //无限循环发送
         circularSending.setCycleCount(Timeline.INDEFINITE);
         //接收保存的开关
-        receiveSave.selectedProperty().addListener((_, _, newValue) -> serialComm.setReceiveSave(newValue));
+        receiveSave.selectedProperty().addListener((_, _, newValue) -> viewModel.setReceiveSave(newValue));
         //发送保存的开关
-        sendSave.selectedProperty().addListener((_, _, newValue) -> serialComm.setSendSave(newValue));
+        sendSave.selectedProperty().addListener((_, _, newValue) -> viewModel.setSendSave(newValue));
         //计数绑定
-        sendNumber.textProperty().bind(serialComm.getSEND_LONG_PROPERTY().asString());
-        receiveNumber.textProperty().bind(serialComm.getRECEIVE_LONG_PROPERTY().asString());
+        sendNumber.textProperty().bind(viewModel.getSEND_LONG_PROPERTY().asString());
+        receiveNumber.textProperty().bind(viewModel.getRECEIVE_LONG_PROPERTY().asString());
 
 
         //串口开关绑定
-        serialPortSwitch.textProperty().bind(serialComm.getSerialPortState().map(state -> state ? "关闭串口" : "打开串口"));
+        serialPortSwitch.textProperty().bind(viewModel.getSerialPortState().map(state -> state ? "关闭串口" : "打开串口"));
         //串口指示灯绑定
-        serialPortLight.fillProperty().bind(serialComm.getSerialPortState().map(state -> state ? Color.LIME : Color.RED));
+        serialPortLight.fillProperty().bind(viewModel.getSerialPortState().map(state -> state ? Color.LIME : Color.RED));
 
         //初始化列表
-        baudRatePicker.setValue(serialComm.getBaudRate());
-        dataBitsPicker.setValue(serialComm.getDataBits());
-        stopBitsPicker.setValue(serialComm.getStopSting());
-        parityPicker.setValue(serialComm.getParitySting());
-        flowControlPicker.setValue(serialComm.getFlowControlSting());
+        baudRatePicker.setValue(viewModel.getBaudRate());
+        dataBitsPicker.setValue(viewModel.getDataBits());
+        stopBitsPicker.setValue(viewModel.getStopSting());
+        parityPicker.setValue(viewModel.getParitySting());
+        flowControlPicker.setValue(viewModel.getFlowControlSting());
 
 
         //串口参数更新
-        serialPortNamePicker.valueProperty().addListener((_, _, newValue) -> serialComm.setSerialPortName(newValue));
-        baudRatePicker.valueProperty().addListener((_, _, newValue) -> serialComm.setBaudRate(newValue));
-        dataBitsPicker.valueProperty().addListener((_, _, newValue) -> serialComm.setDataBits(newValue));
-        stopBitsPicker.valueProperty().addListener((_, _, newValue) -> serialComm.setStopBits(newValue));
-        parityPicker.valueProperty().addListener((_, _, newValue) -> serialComm.setParity(newValue));
-        flowControlPicker.valueProperty().addListener((_, _, newValue) -> serialComm.setFlowControl(newValue));
+        serialPortNamePicker.valueProperty().addListener((_, _, newValue) -> viewModel.setSerialPortName(newValue));
+        baudRatePicker.valueProperty().addListener((_, _, newValue) -> viewModel.setBaudRate(newValue));
+        dataBitsPicker.valueProperty().addListener((_, _, newValue) -> viewModel.setDataBits(newValue));
+        stopBitsPicker.valueProperty().addListener((_, _, newValue) -> viewModel.setStopBits(newValue));
+        parityPicker.valueProperty().addListener((_, _, newValue) -> viewModel.setParity(newValue));
+        flowControlPicker.valueProperty().addListener((_, _, newValue) -> viewModel.setFlowControl(newValue));
 
 
         //串口号列表周期刷新
@@ -275,7 +273,7 @@ public class SerialPortView {
                 if (waitTime < 1) {
                     waitTime = 1;
                 }
-                serialComm.setWaitTime(waitTime);
+                viewModel.setWaitTime(waitTime);
             } catch (NumberFormatException e) {
                 time.setText(oldValue);
             }
@@ -286,7 +284,7 @@ public class SerialPortView {
             if (newValue) {
                 circularSending.getKeyFrames().clear();
                 circularSending.getKeyFrames().add(new KeyFrame(Duration.millis(waitTime), _ -> {
-                    if (serialComm.write(bytes) < 1) {
+                    if (viewModel.write(bytes) < 1) {
                         circularSending.stop();
                         timedDispatch.setSelected(false);
                     }
@@ -318,19 +316,19 @@ public class SerialPortView {
         });
 
         //是否显示接收到的内容
-        receiveShow.selectedProperty().addListener((_, _, newValue) -> serialComm.setReceiveShow(newValue));
+        receiveShow.selectedProperty().addListener((_, _, newValue) -> viewModel.setReceiveShow(newValue));
 
         //实时刷新接收到的内容
-        serialComm.getRECEIVE_LONG_PROPERTY().addListener((_, _, _) -> {
+        viewModel.getRECEIVE_LONG_PROPERTY().addListener((_, _, _) -> {
             if (receiveShow.isSelected()) {
-                receive.setText(hexReceive.isSelected() ? CodeFormat.hex(serialComm.getData()) : CodeFormat.utf8(serialComm.getData()));
+                receive.setText(hexReceive.isSelected() ? CodeFormat.hex(viewModel.getData()) : CodeFormat.utf8(viewModel.getData()));
                 receive.setScrollTop(Double.MAX_VALUE);
             }
         });
 
         //将接收到的内容以16进制的形式进行发送
         hexReceive.selectedProperty().addListener((_, _, newValue) -> {
-            byte[] data = serialComm.getData();
+            byte[] data = viewModel.getData();
             receive.setText(newValue ? CodeFormat.hex(data) : CodeFormat.utf8(data));
             //滚动条自动滚动
             receive.setScrollTop(Double.MAX_VALUE);
@@ -338,8 +336,8 @@ public class SerialPortView {
 
         //如何串口被拔掉则将其关闭并且将串口的名称改为 ""
         SerialPortMonitor.serialPorts.addListener((_, _, newValue) -> {
-            if (newValue != null && !newValue.contains(serialComm.getSerialPortName())) {
-                serialComm.close();
+            if (newValue != null && !newValue.contains(viewModel.getSerialPortName())) {
+                viewModel.close();
                 serialPortNamePicker.setValue("");
             }
         });
@@ -367,4 +365,6 @@ public class SerialPortView {
         parityPicker.setValue(parity);
         flowControlPicker.setValue(flow);
     }
+
+
 }

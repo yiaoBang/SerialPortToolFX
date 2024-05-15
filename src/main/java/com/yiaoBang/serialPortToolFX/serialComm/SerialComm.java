@@ -2,16 +2,17 @@ package com.yiaoBang.serialPortToolFX.serialComm;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
+import com.yiaoBang.javafxTool.core.FX;
+import com.yiaoBang.javafxTool.mvvm.ViewModel;
 import com.yiaoBang.serialPortToolFX.data.ByteBuffer;
 import com.yiaoBang.serialPortToolFX.data.DataWriteFile;
-import com.yiaoBang.serialPortToolFX.data.MockResponses;
-import com.yiaoBang.serialPortToolFX.serialComm.listener.MessageListenerWithDelimiter;
-import com.yiaoBang.serialPortToolFX.serialComm.listener.MessageListenerWithPacketSize;
-import com.yiaoBang.javafxTool.core.FX;
+import com.yiaoBang.serialPortToolFX.mockresponses.MockResponses;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.File;
 
 /**
  * 串行通信
@@ -20,7 +21,8 @@ import lombok.Setter;
  * @date 2024/05/14
  */
 @Getter
-public final class SerialComm implements AutoCloseable {
+public final class SerialComm implements ViewModel, AutoCloseable {
+
     //最多显示4096个接收到的字节(再多的话滚动条会出问题)
     private static final int maxShowByteNumber = 4096;
     private final ByteBuffer buffer = new ByteBuffer(maxShowByteNumber);
@@ -67,40 +69,11 @@ public final class SerialComm implements AutoCloseable {
     private String paritySting = "无";
     private int flowControl = 0;
     private String flowControlSting = "无";
-    private SerialPortDataListener listener;
-    private byte[] messageDelimiter = new byte[0];
-    private int packSize = 0;
+    private final SerialPortDataListener listener;
+
 
     public SerialComm() {
-        this.listener = new MessageListenerWithDelimiter(this);
-    }
-
-    /**
-     * 更新侦听器
-     *
-     * @param messageDelimiter 消息分隔符
-     */
-    public void updateListener(byte[] messageDelimiter) {
-        if (messageDelimiter != null) {
-            this.messageDelimiter = messageDelimiter;
-            this.listener = new MessageListenerWithDelimiter(this);
-            serialPort.removeDataListener();
-            serialPort.addDataListener(this.listener);
-        }
-    }
-
-    /**
-     * 更新侦听器
-     *
-     * @param packSize 包大小
-     */
-    public void updateListener(int packSize) {
-        if (messageDelimiter != null) {
-            this.packSize = packSize;
-            this.listener = new MessageListenerWithPacketSize(this);
-            serialPort.removeDataListener();
-            serialPort.addDataListener(this.listener);
-        }
+        this.listener = new SerialCommDataListener(this);
     }
 
     /**
@@ -145,8 +118,7 @@ public final class SerialComm implements AutoCloseable {
             int sendNumber = serialPort.writeBytes(bytes, bytes.length);
             if (sendNumber > 0) {
                 FX.run(() -> SEND_LONG_PROPERTY.set(SEND_LONG_PROPERTY.get() + sendNumber));
-                if (sendSave)
-                    Thread.startVirtualThread(() -> dataWriteFile.serialCommSend(bytes));
+                if (sendSave) Thread.startVirtualThread(() -> dataWriteFile.serialCommSend(bytes));
             } else {
                 this.close();
             }
@@ -161,25 +133,16 @@ public final class SerialComm implements AutoCloseable {
      * @param bytes 字节
      */
     public void listen(byte[] bytes) {
+        //计数
+        FX.run(() -> RECEIVE_LONG_PROPERTY.set(RECEIVE_LONG_PROPERTY.get() + bytes.length));
+        //写入本地文件
+        if (receiveSave) Thread.startVirtualThread(() -> dataWriteFile.serialCommReceive(bytes));
+        //缓存
+        if (receiveShow) buffer.add(bytes);
         //模拟回复
         if (mockResponses != null) {
-            Thread.startVirtualThread(() -> {
-                byte[] reply = mockResponses.reply(bytes);
-                if (reply != null) {
-                    try {
-                        Thread.sleep(waitTime);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    write(reply);
-                }
-            });
+            mockResponses.checkData(bytes);
         }
-        if (receiveShow)
-            buffer.add(bytes);
-        FX.run(() -> RECEIVE_LONG_PROPERTY.set(RECEIVE_LONG_PROPERTY.get() + bytes.length));
-        if (receiveSave)
-            Thread.startVirtualThread(() -> dataWriteFile.serialCommReceive(bytes));
     }
 
     /**
@@ -281,6 +244,21 @@ public final class SerialComm implements AutoCloseable {
             default -> SerialPort.FLOW_CONTROL_DISABLED;
         };
         openSerialPort();
+    }
+
+    public boolean createMockResponses(File file) {
+        if (this.mockResponses != null) {
+            this.mockResponses.close();
+            this.mockResponses = null;
+        }
+        if (file == null) {
+            return false;
+        }
+        this.mockResponses = MockResponses.createMockResponses(file);
+        if (this.mockResponses != null) {
+            mockResponses.setSerialComm(this);
+        }
+        return this.mockResponses != null;
     }
 
     /**

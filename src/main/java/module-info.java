@@ -7,8 +7,4 @@ open module SerialPortToolFX {
     requires com.fazecast.jSerialComm;
     requires lombok;
     requires atlantafx.base;
-
-
-    exports com.yiaoBang.serialPortToolFX;
-
 }
