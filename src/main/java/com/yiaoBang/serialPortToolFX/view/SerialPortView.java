@@ -18,11 +18,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import static com.yiaoBang.serialPortToolFX.AppLauncher.FILE_CHOOSER;
 
 
@@ -365,6 +363,4 @@ public class SerialPortView extends ViewFXML<SerialComm> {
         parityPicker.setValue(parity);
         flowControlPicker.setValue(flow);
     }
-
-
 }
