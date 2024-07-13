@@ -18,9 +18,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
+
 import static com.yiaoBang.serialPortToolFX.AppLauncher.FILE_CHOOSER;
 
 
@@ -32,7 +34,6 @@ public class SerialPortView extends ViewFXML<SerialComm> {
     private volatile long waitTime = 1000;
     private volatile byte[] bytes;
     private volatile int theme = 0;
-
     @FXML
     private AnchorPane root;
     //串口名称选择器
@@ -315,6 +316,7 @@ public class SerialPortView extends ViewFXML<SerialComm> {
 
         //是否显示接收到的内容
         receiveShow.selectedProperty().addListener((_, _, newValue) -> viewModel.setReceiveShow(newValue));
+
 
         //实时刷新接收到的内容
         viewModel.getRECEIVE_LONG_PROPERTY().addListener((_, _, _) -> {
