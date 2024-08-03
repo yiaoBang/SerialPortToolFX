@@ -39,6 +39,11 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
 application {
     applicationName = 'SerialPortToolFX'
     mainClass = 'com.yiaoBang.serialPortToolFX.AppLauncher'
@@ -47,11 +52,6 @@ application {
                                  , '-XX:+UseZGC'
     ]
 }
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
-}
-
 jlink {
     options.set(List.of('--strip-debug', '--compress', 'zip-9', '--no-header-files', '--no-man-pages'))
     launcher {

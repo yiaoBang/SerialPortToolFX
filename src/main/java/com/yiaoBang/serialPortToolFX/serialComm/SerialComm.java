@@ -52,6 +52,7 @@ public final class SerialComm implements ViewModel, AutoCloseable {
     private final SimpleLongProperty RECEIVE_LONG_PROPERTY = new SimpleLongProperty(0);
     //串口状态
     private final SimpleBooleanProperty serialPortState = new SimpleBooleanProperty(false);
+
     public static final Integer[] BAUD_RATE = {9600, 19200, 38400, 115200, 128000, 230400, 256000, 460800, 921600, 1382400};
     public static final Integer[] DATA_BITS = {8, 7, 6, 5};
     public static final String[] STOP_BITS = {"1", "1.5", "2"};
